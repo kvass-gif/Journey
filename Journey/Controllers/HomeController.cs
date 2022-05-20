@@ -1,32 +1,35 @@
-﻿using Journey.Models;
+﻿using Journey.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 
 namespace Journey.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly UnitOfWork unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(UnitOfWork unitOfWork)
         {
-            _logger = logger;
+            this.unitOfWork = unitOfWork;
         }
-
         public IActionResult Index()
         {
-            return View();
+
+            var arr = unitOfWork.PlaceRepository.GetAll().ToArray();
+            return View(arr);
+        }
+        public IActionResult Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var obj = unitOfWork.PlaceRepository.Find((int)id);
+            if (obj == null)
+            {
+                return NotFound();
+            }
+            return View(obj);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
     }
 }

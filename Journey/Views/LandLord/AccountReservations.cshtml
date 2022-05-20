@@ -1,0 +1,29 @@
+﻿@using Journey.Entities
+@model ICollection<Reservation>
+@{
+    ViewData["Title"] = "Reservations list";
+}
+<h1>LandLord Page</h1>
+<h2>@ViewData["Title"]</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ArrivalDate</th>
+            <th scope="col">DepartureDate</th>
+            <th scope="col">IsArrived</th>
+            <th scope="col">AccountName</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th>@item.ArrivalDate</th>
+                <td>@item.DepartureDate</td>
+                <td>@item.IsArrived</td>
+                <td>@item.Account.AccountName</td>
+            </tr>
+        }
+
+    </tbody>
+</table>

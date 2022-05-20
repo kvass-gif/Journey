@@ -1,0 +1,28 @@
+﻿@using Journey.Entities
+@model Account
+@{
+    ViewData["Title"] = "LandLords page";
+    ViewData["AccountName"] = Model.AccountName;
+}
+<h1>@ViewData["Title"]</h1>
+<h2>Places</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">PlaceName</th>
+            <th scope="col">Reservations</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Places)
+        {
+            <tr>
+                <th scope="row">@item.PlaceName</th>
+                <td>
+                    <a asp-controller="LandLord" asp-action="AccountReservations" 
+                    asp-route-placeId="@item.Id">Reservations</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
