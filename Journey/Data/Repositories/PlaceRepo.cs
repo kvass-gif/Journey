@@ -6,7 +6,7 @@ namespace Journey.Data.Repositories
     public class PlaceRepo
     {
         private readonly DbSet<Place> _places;
-        public PlaceRepo(AppDbContext appDbContext)
+        public PlaceRepo(ApplicationDbContext appDbContext)
         {
             _places = appDbContext.Places;
         }

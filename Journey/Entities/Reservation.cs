@@ -11,7 +11,5 @@ namespace Journey.Entities
         public bool IsArrived { get; set; }
         public int PlaceId { get; set; }
         public Place? Place { get; set; }
-        public int AccountId { get; set; }
-        public Account? Account { get; set; }
     }
 }

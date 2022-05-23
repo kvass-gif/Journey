@@ -1,4 +1,5 @@
 ﻿using Journey.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journey.Controllers
@@ -13,7 +14,6 @@ namespace Journey.Controllers
         }
         public IActionResult Index()
         {
-
             var arr = unitOfWork.PlaceRepository.GetAll().ToArray();
             return View(arr);
         }
