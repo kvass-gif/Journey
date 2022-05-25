@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220523145626_init")]
-    partial class init
+    [Migration("20220525124756_rankPriceInt")]
+    partial class rankPriceInt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,6 +32,9 @@ namespace Journey.Migrations.ApplicationDb
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -45,6 +48,12 @@ namespace Journey.Migrations.ApplicationDb
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("PricePerNight")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Rank")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
 
@@ -54,24 +63,6 @@ namespace Journey.Migrations.ApplicationDb
                         .IsUnique();
 
                     b.ToTable("Places");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CreatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 714, DateTimeKind.Local).AddTicks(9660),
-                            Description = "Aspernatur commodi ab quia hic adipisci commodi.",
-                            PlaceName = "Apartment on Kamyanetskaya street",
-                            UpdatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 714, DateTimeKind.Local).AddTicks(9689)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CreatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(636),
-                            Description = "Eligendi dicta sit eveniet reprehenderit sit et.",
-                            PlaceName = "Avto Spa",
-                            UpdatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(639)
-                        });
                 });
 
             modelBuilder.Entity("Journey.Entities.Reservation", b =>
@@ -81,6 +72,9 @@ namespace Journey.Migrations.ApplicationDb
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AccountId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ArrivalDate")
                         .HasColumnType("datetime2");
@@ -105,38 +99,6 @@ namespace Journey.Migrations.ApplicationDb
                     b.HasIndex("PlaceId");
 
                     b.ToTable("Reservations");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            ArrivalDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1403),
-                            CreatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1397),
-                            DepartureDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1404),
-                            IsArrived = false,
-                            PlaceId = 1,
-                            UpdatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1401)
-                        },
-                        new
-                        {
-                            Id = 2,
-                            ArrivalDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1410),
-                            CreatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1406),
-                            DepartureDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1411),
-                            IsArrived = false,
-                            PlaceId = 1,
-                            UpdatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1408)
-                        },
-                        new
-                        {
-                            Id = 3,
-                            ArrivalDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1416),
-                            CreatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1413),
-                            DepartureDate = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1417),
-                            IsArrived = false,
-                            PlaceId = 2,
-                            UpdatedAt = new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1414)
-                        });
                 });
 
             modelBuilder.Entity("Journey.Entities.Reservation", b =>

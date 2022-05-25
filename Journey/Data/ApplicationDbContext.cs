@@ -11,7 +11,8 @@ namespace Journey.Data
         public DbSet<Reservation> Reservations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Seed();
+            //modelBuilder.SeedPlaces();
+            //modelBuilder.SeedReservations();
         }
     }
 }

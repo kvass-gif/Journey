@@ -1,18 +1,47 @@
 ﻿@using Journey.Entities
+@using Microsoft.AspNetCore.Identity
 @model ICollection<Place>
+@inject SignInManager<IdentityUser> SignInManager
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "LandLord page";
 }
-<h1>Places</h1>
-<ul class="list-group">
-    @foreach (var item in Model)
-    {
-        <li class="list-group-item">
-            <a asp-controller="Home"
-           asp-action="Details"
-           asp-route-id="@item.Id">@item.PlaceName</a>
-        </li>
-    }
-</ul>
-
+<h2>Places</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                PlaceName
+            </th>
+             <th>
+                PricePerNight
+            </th>
+            <th>
+                Rank
+            </th>
+            @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
+            {
+                <th>Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td><a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">@item.PlaceName</a></td>
+                <td>@item.PricePerNight</td>
+                <td>@item.Rank</td>
+                @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
+                {
+                    <td>
+                        <a class="btn btn-dark" asp-controller="Tenant" asp-action="MakeReservation"
+                   asp-route-placeId="@item.Id">
+                            Make Reservation
+                        </a>
+                    </td>
+                }
+            </tr>
+        }
+    </tbody>
+</table>
 

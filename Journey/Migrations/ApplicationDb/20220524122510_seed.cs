@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Journey.Migrations.ApplicationDb
 {
-    public partial class init : Migration
+    public partial class seed : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -52,27 +52,27 @@ namespace Journey.Migrations.ApplicationDb
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "Id", "CreatedAt", "Description", "PlaceName", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2022, 5, 23, 17, 56, 26, 714, DateTimeKind.Local).AddTicks(9660), "Aspernatur commodi ab quia hic adipisci commodi.", "Apartment on Kamyanetskaya street", new DateTime(2022, 5, 23, 17, 56, 26, 714, DateTimeKind.Local).AddTicks(9689) });
+                values: new object[] { 1, new DateTime(2022, 5, 24, 15, 25, 10, 749, DateTimeKind.Local).AddTicks(9475), "Ut atque eius nobis.", "Apartment on Kamyanetskaya street", new DateTime(2022, 5, 24, 15, 25, 10, 749, DateTimeKind.Local).AddTicks(9505) });
 
             migrationBuilder.InsertData(
                 table: "Places",
                 columns: new[] { "Id", "CreatedAt", "Description", "PlaceName", "UpdatedAt" },
-                values: new object[] { 2, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(636), "Eligendi dicta sit eveniet reprehenderit sit et.", "Avto Spa", new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(639) });
+                values: new object[] { 2, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(136), "Et quos est dolor quisquam et sit iure consectetur fugit.", "Avto Spa", new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(140) });
 
             migrationBuilder.InsertData(
                 table: "Reservations",
                 columns: new[] { "Id", "ArrivalDate", "CreatedAt", "DepartureDate", "IsArrived", "PlaceId", "UpdatedAt" },
-                values: new object[] { 1, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1403), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1397), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1404), false, 1, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1401) });
+                values: new object[] { 1, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1021), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1015), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1023), false, 1, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1020) });
 
             migrationBuilder.InsertData(
                 table: "Reservations",
                 columns: new[] { "Id", "ArrivalDate", "CreatedAt", "DepartureDate", "IsArrived", "PlaceId", "UpdatedAt" },
-                values: new object[] { 2, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1410), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1406), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1411), false, 1, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1408) });
+                values: new object[] { 2, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1028), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1025), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1029), false, 1, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1026) });
 
             migrationBuilder.InsertData(
                 table: "Reservations",
                 columns: new[] { "Id", "ArrivalDate", "CreatedAt", "DepartureDate", "IsArrived", "PlaceId", "UpdatedAt" },
-                values: new object[] { 3, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1416), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1413), new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1417), false, 2, new DateTime(2022, 5, 23, 17, 56, 26, 715, DateTimeKind.Local).AddTicks(1414) });
+                values: new object[] { 3, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1065), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1061), new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1066), false, 2, new DateTime(2022, 5, 24, 15, 25, 10, 750, DateTimeKind.Local).AddTicks(1063) });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Places_PlaceName",

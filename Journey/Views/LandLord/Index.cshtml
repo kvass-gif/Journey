@@ -1,27 +1,28 @@
 ﻿@using Journey.Entities
-@*@model Account
+@model ICollection<Place>
 @{
-    ViewData["Title"] = "LandLords page";
+    ViewData["Title"] = "LandLord page";
 }
-<h1>@ViewData["Title"]</h1>
+<h1>LandLord page</h1>
 <h2>Places</h2>
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">PlaceName</th>
-            <th scope="col">Reservations</th>
+            <th>PlaceName</th>
+            <td>PricePerNight</td>
+            <td>Rank</td>
+            <td></td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.Places)
+        @foreach (var item in Model)
         {
             <tr>
-                <th scope="row">@item.PlaceName</th>
-                <td>
-                    <a asp-controller="LandLord" asp-action="AccountReservations" 
-                    asp-route-placeId="@item.Id">Reservations</a>
-                </td>
+                <td>@item.PlaceName</td>
+                <td>@item.PricePerNight</td>
+                <td>@item.Rank</td>
+                <td><a asp-controller="LandLord" asp-action="Reservations" asp-route-id="@item.Id">Reservations</a></td>
             </tr>
         }
     </tbody>
-</table>*@
+</table>

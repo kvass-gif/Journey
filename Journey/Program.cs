@@ -1,7 +1,8 @@
+using Journey.Areas.Identity.Data;
 using Journey.Data;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,8 @@ var connectionString = builder.Configuration.GetConnectionString("AccountConnect
 builder.Services.AddDbContext<AccountDbContext>(options =>
     options.UseSqlServer(connectionString)); ;
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-    .AddEntityFrameworkStores<AccountDbContext>(); ;
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<AccountDbContext>();
 builder.Services.Configure<IdentityOptions>(options =>
 {
     // Password settings.
@@ -44,6 +46,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("LandLordOnly", policy => policy
     .RequireClaim(ClaimTypes.Role, "LandLord"));
 });
+builder.Services.AddScoped<AccountUnitOfWork>();
 ///////////////////////////////////////////////////////////////////////////////////
 string connection = builder.Configuration.GetConnectionString("ApplicationConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

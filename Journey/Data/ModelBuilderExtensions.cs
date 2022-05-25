@@ -1,16 +1,29 @@
 ﻿using Journey.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Journey.Data
 {
     public static class ModelBuilderExtensions
     {
-        public static void Seed(this ModelBuilder modelBuilder)
+        public static void SeedRoles(this ModelBuilder modelBuilder)
         {
-            seedPlaces(modelBuilder);
-            seedReservations(modelBuilder);
+            modelBuilder.Entity<IdentityRole>().HasData(
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "Tenant",
+                    NormalizedName = "TENANT"
+                },
+                new IdentityRole
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = "LandLord",
+                    NormalizedName = "LANDLORD"
+                }
+            );
         }
-        private static void seedPlaces(ModelBuilder modelBuilder)
+        public static void SeedPlaces(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Place>().HasData(
                 new Place
@@ -27,7 +40,7 @@ namespace Journey.Data
                 }
             );
         }
-        private static void seedReservations(ModelBuilder modelBuilder)
+        public static void SeedReservations(this ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Reservation>().HasData(
                 new Reservation
@@ -55,7 +68,7 @@ namespace Journey.Data
                     DepartureDate = DateTime.Now,
                     IsArrived = false,
                 }
-            ); 
+            );
         }
     }
 }

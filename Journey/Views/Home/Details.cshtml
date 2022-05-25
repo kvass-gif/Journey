@@ -1,5 +1,7 @@
 ﻿@using Journey.Entities
+@using Microsoft.AspNetCore.Identity
 @model Place
+@inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "Details";
 }
@@ -31,4 +33,13 @@
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary" style="width:150px">
         Back to List
     </a>
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
+    {
+
+        <a class="btn btn-dark" asp-controller="Tenant" asp-action="MakeReservation"
+       asp-route-placeId="@Model.Id">
+            Make Reservation
+        </a>
+
+    }
 </div>

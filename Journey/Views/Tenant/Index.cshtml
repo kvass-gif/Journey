@@ -1,48 +1,28 @@
 ﻿@using Journey.Entities
-@*@model Account
+@model ICollection<Reservation>
 @{
     ViewData["Title"] = "Tenant Page";
 }
-<h1>Tenants Page</h1>
-<h2>Reservations</h2>
+<h1>Tenant page</h1>
+<h2>Reservatios</h2>
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">PlaceName</th>
-            <th scope="col">ArrivalDate</th>
-            <th scope="col">DepartureDate</th>
-            <th scope="col">IsArrived</th>
+            <th>PlaceName</th>
+            <th>ArrivalDate</th>
+            <th>DepartureDate</th>
+            <th>IsArrived</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model.Reservations != null)
+        @foreach (var item in Model)
         {
-            @foreach (var item in Model.Reservations)
-            {
-                <tr>
-                    @if (item.Place == null)
-                    {
-                        <td>null</td>
-                        <td>null</td>
-                        <td>null</td>
-                        <td>null</td>
-                    }
-                    else
-                    {
-                        <td>
-                            <a asp-controller="Home"
-                            asp-action="Details"
-                            asp-route-id="@item.Place.Id">
-                            @item.Place.PlaceName
-                            </a>
-                        </td>
-                        <td>@item.ArrivalDate</td>
-                        <td>@item.DepartureDate</td>
-                        <td>@item.IsArrived</td>
-                    }
-                </tr>
-            }
+            <tr>
+                <td>@item.Place!.PlaceName</td>
+                <td>@item.ArrivalDate</td>
+                <td>@item.DepartureDate</td>
+                <td>@item.IsArrived</td>
+            </tr>
         }
     </tbody>
 </table>
-*@

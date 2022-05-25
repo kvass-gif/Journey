@@ -4,21 +4,23 @@ namespace Journey.Data
 {
     public class UnitOfWork
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext app;
+        private readonly AccountDbContext account;
 
         private PlaceRepo placeRepo;
         private ReservationRepo reservationRepo;
-        public UnitOfWork(ApplicationDbContext context)
+        public UnitOfWork(ApplicationDbContext app, AccountDbContext account)
         {
-            this.context = context;
+            this.app = app;
+            this.account = account;
         }
-        public PlaceRepo PlaceRepository
+        public PlaceRepo PlaceRepo
         {
             get
             {
                 if (placeRepo == null)
                 {
-                    placeRepo = new PlaceRepo(context);
+                    placeRepo = new PlaceRepo(app);
                 }
                 return placeRepo;
             }
@@ -29,14 +31,18 @@ namespace Journey.Data
             {
                 if (reservationRepo == null)
                 {
-                    reservationRepo = new ReservationRepo(context);
+                    reservationRepo = new ReservationRepo(app, account);
                 }
                 return reservationRepo;
             }
         }
-        public void Save()
+        public void SaveApp()
         {
-            context.SaveChanges();
+            app.SaveChanges();
+        }
+        public void SaveAccount()
+        {
+            account.SaveChanges();
         }
     }
 }

@@ -14,7 +14,7 @@ namespace Journey.Controllers
         }
         public IActionResult Index()
         {
-            var arr = unitOfWork.PlaceRepository.GetAll().ToArray();
+            var arr = unitOfWork.PlaceRepo.Places().ToArray();
             return View(arr);
         }
         public IActionResult Details(int? id)
@@ -23,13 +23,14 @@ namespace Journey.Controllers
             {
                 return NotFound();
             }
-            var obj = unitOfWork.PlaceRepository.Find((int)id);
+            var obj = unitOfWork.PlaceRepo.Find((int)id);
             if (obj == null)
             {
                 return NotFound();
             }
             return View(obj);
         }
+       
 
     }
 }
