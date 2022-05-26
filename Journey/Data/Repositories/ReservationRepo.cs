@@ -22,22 +22,30 @@ namespace Journey.Data.Repositories
                                 select a).Include(a => a.Place);
             return reservations;
         }
-        public IQueryable<Reservation> ReservationsByPlaceId(int placeId)
+        public IEnumerable<Reservation> ReservationsByPlaceId(int placeId)
         {
-            var reservations = (from a in _identityUsers
-                                join r in _reservations on a.Id equals r.AccountId
-                                where r.PlaceId == placeId
-                                select new Reservation()
-                                {
-                                    ArrivalDate = r.ArrivalDate,
-                                    DepartureDate = r.DepartureDate,
-                                    IsArrived = r.IsArrived,
-                                    PlaceId = r.PlaceId,
-                                    Place = r.Place,
-                                    AccountId = r.AccountId,
-                                    Account = a
-                                });
-            return reservations;
+            var arr = (from a in _reservations
+                       where placeId == a.PlaceId
+                       select a).Include(a => a.Place).ToArray();
+            var reservations = from r in arr
+                               join i in _identityUsers on r.AccountId equals i.Id
+                               orderby i.UserName
+                               select new
+                               {
+                                   Reservation = r,
+                                   Account = i
+                               };
+            var reservations2 = new List<Reservation>();
+            foreach (var item in reservations)
+            {
+                reservations2.Add(item.Reservation);
+                reservations2.Last().Account = item.Account;
+            }
+            return reservations2;
+        }
+        public Reservation? FindOne(int id)
+        {
+            return _reservations.SingleOrDefault(a => a.Id == id);
         }
 
         public void Add(Reservation obj)

@@ -17,8 +17,14 @@ namespace Journey.Controllers
         }
         public IActionResult Index()
         {
-            var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var accountId = "a8eddd62-a9b5-4f1f-9b9c-68f8abdf0e30";
+
             var arr = unitOfWork.ReservationRepo.ReservationsByTenantId(accountId).ToArray();
+            foreach (var item in arr)
+            {
+                item.Sum = (item.DepartureDate - item.ArrivalDate).Days * item.Place!.PricePerNight;
+            }
             return View(arr);
         }
         public IActionResult MakeReservation(int placeId)
@@ -28,6 +34,7 @@ namespace Journey.Controllers
             reservation.DepartureDate = DateTime.Now.AddDays(2);
             reservation.MaxDurationDays = 30;
             reservation.PlaceId = placeId;
+            
             return View(reservation);
         }
         [HttpPost]
@@ -38,7 +45,7 @@ namespace Journey.Controllers
             {
                 try
                 {
-                    reservation.AccountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    reservation.AccountId = "a8eddd62-a9b5-4f1f-9b9c-68f8abdf0e30";
                     unitOfWork.ReservationRepo.Add(reservation);
                     unitOfWork.SaveApp();
                     return RedirectToAction(nameof(Index));
@@ -52,6 +59,23 @@ namespace Journey.Controllers
                 }
             }
             return View(reservation);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult CancelReservation(int? id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+            var res = unitOfWork.ReservationRepo.FindOne((int)id);
+            if (res == null)
+            {
+                return NotFound();
+            }
+            res.Status = Status.Canceled;
+            unitOfWork.SaveApp();
+            return RedirectToAction(nameof(Index));
         }
     }
 }

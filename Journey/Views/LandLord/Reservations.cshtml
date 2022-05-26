@@ -10,17 +10,59 @@
             <th>UserName</th>
             <th>ArrivalDate</th>
             <th>DepartureDate</th>
-            <th>IsArrived</th>
+            <th>Sum</th>
+            <th>IsPaid</th>
+            <th>Status</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
-                <td>@item.Account.UserName</td>
+                <td>@item.Account!.UserName</td>
                 <td>@item.ArrivalDate</td>
                 <td>@item.DepartureDate</td>
-                <td>@item.IsArrived</td>
+                <td>@item.Sum</td>
+                @if (item.IsPaid)
+                {
+                    <td>@item.IsPaid</td>
+                }
+                else if(item.Status == Status.Canceled || item.Status == Status.Completed)
+                {
+                    <td>@item.IsPaid</td>
+                }
+                else
+                {
+                    <td>
+                        <form class="form-inline" asp-controller="LandLord" asp-action="MakePayment" asp-route-id="@item.Id">
+                            <button type="submit" class="btn btn-dark">MakePayment</button>
+                        </form>
+                    </td>
+                }
+                <td>
+                    @if (item.Status == Status.Canceled || item.Status == Status.Completed)
+                    {
+                        @item.Status.ToString()
+                    }
+                    else
+                    {
+                        <form class="form-inline" asp-controller="LandLord" asp-action="ChangeStatus" asp-route-id="@item.Id">
+                            <select onchange="this.form.submit()" name="select" id="select">
+                                @foreach (var c in item.StatusDictionary!)
+                                {
+                                    @if (item.Status.ToString() == c.Value.ToString())
+                                    {
+                                        <option value="@c.Key" selected>@c.Value</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@c.Key">@c.Value</option>
+                                    }
+                                }
+                            </select>
+                        </form>
+                    }
+                </td>
             </tr>
         }
     </tbody>

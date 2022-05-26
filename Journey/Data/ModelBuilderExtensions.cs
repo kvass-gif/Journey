@@ -49,7 +49,7 @@ namespace Journey.Data
                     PlaceId = 1,
                     ArrivalDate = DateTime.Now,
                     DepartureDate = DateTime.Now,
-                    IsArrived = false,
+                    IsPaid = false,
 
                 },
                 new Reservation
@@ -58,7 +58,7 @@ namespace Journey.Data
                     PlaceId = 1,
                     ArrivalDate = DateTime.Now,
                     DepartureDate = DateTime.Now,
-                    IsArrived = false,
+                    IsPaid = false,
                 },
                 new Reservation
                 {
@@ -66,7 +66,7 @@ namespace Journey.Data
                     PlaceId = 2,
                     ArrivalDate = DateTime.Now,
                     DepartureDate = DateTime.Now,
-                    IsArrived = false,
+                    IsPaid = false,
                 }
             );
         }

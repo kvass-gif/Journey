@@ -55,13 +55,77 @@ namespace Journey.Controllers
             {
                 return NotFound();
             }
-            var arr = unitOfWork.ReservationRepo.ReservationsByPlaceId((int)id);
-            if (arr == null)
+            var list = unitOfWork.ReservationRepo.ReservationsByPlaceId((int)id);
+            foreach (var item in list)
+            {
+                item.Sum = (item.DepartureDate - item.ArrivalDate).Days * item.Place!.PricePerNight;
+            }
+            foreach (var res in list)
+            {
+                var dic = new Dictionary<int, string>();
+                foreach (var stat in Enum.GetValues(typeof(Status)))
+                {
+                    if (
+                        (Status)stat == Status.Waiting
+                        ||
+                        res.IsPaid && res.ArrivalDate < DateTime.Now
+                        && (((Status)stat == Status.Completed)
+                        || ((Status)stat == Status.InPlace))
+                        ||
+                        !res.IsPaid
+                        && res.ArrivalDate >= DateTime.Now
+                        && ((Status)stat == Status.Canceled)
+                        )
+                    {
+                        if(res.Status == Status.InPlace && (Status)stat == Status.Waiting)
+                        {
+                            continue;
+                        }
+                        dic.Add((int)stat, ((Status)stat).ToString());
+                    }
+                }
+                res.StatusDictionary = dic;
+            }
+            if (list == null)
             {
                 return NotFound();
             }
-            return View(arr.ToArray());
+            return View(list);
         }
-       
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult MakePayment(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var one = unitOfWork.ReservationRepo.FindOne((int)id);
+            if (one == null)
+            {
+                return NotFound();
+            }
+            one.IsPaid = true;
+            unitOfWork.SaveApp();
+            return RedirectToAction(nameof(Reservations));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeStatus(int? id, int select)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var one = unitOfWork.ReservationRepo.FindOne((int)id);
+            if (one == null)
+            {
+                return NotFound();
+            }
+            one.Status = (Status)select;
+            unitOfWork.SaveApp();
+            return RedirectToAction(nameof(Reservations), new { id = one.PlaceId });
+        }
+
     }
 }
