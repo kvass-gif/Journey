@@ -28,7 +28,7 @@
                 <td>@item.IsPaid</td>
                 <td>@item.Status</td>
                 <td>
-                    @if (item.Status != Status.Canceled)
+                    @if (!item.IsPaid && item.Status == Status.Waiting)
                     {
                         <form class="form-inline" asp-controller="Tenant" asp-action="CancelReservation" asp-route-id="@item.Id">
                             <button type="submit" class="btn btn-dark">Cancel</button>

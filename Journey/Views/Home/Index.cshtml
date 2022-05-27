@@ -4,11 +4,9 @@
 @inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "LandLord page";
-    var str = "~/frontImages/Bg_img.png";
 }
 
 <div class="d-flex justify-content-center">
-    <!-- вибір ім'я, місто готеля, дата заїзду(мінімум завтрішня дата) дата виїзду(мінімум наступна після завтрішньої), вибір місця проживання(чи будинок або кімната) -->
     <form action="" action="/action_page.php" method="get"
           class="row d-flex flex-wrap align-items-center justify-content-center mb-4 bg-light"
           style="border-radius: 10px;">
@@ -28,13 +26,13 @@
             <div class="me-1">
                 <label for="exampleFormControlInput1" class="form-label text-muted fw-bold"
                        style="height: 12px; font-size:12px">Check in</label>
-                <input type="date" class="form-control bg-light" id="checkIn"
+                <input type="date" class="form-control bg-light" id="ArrivalDate" name="arrivalDate" value="@ViewData["arrivalDate"]"
                        style="font-size:15px; border: none; padding-top: 0;">
             </div>
             <div>
                 <label for="exampleFormControlInput2" class="form-label text-muted fw-bold"
                        style="height: 12px; font-size:12px">Check out</label>
-                <input type="date" class="form-control bg-light" id="checkOut"
+                <input type="date" class="form-control bg-light" id="DepartureDate" name="departureDate" value="@ViewData["departureDate"]"
                        style="font-size:15px; border: none; padding-top: 0;">
             </div>
         </div>
@@ -97,4 +95,32 @@
         }
     </tbody>
 </table>
+@section Scripts{
+    <script>
 
+
+        function toFormat(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            month = month / 10 >= 1 ? month.toString() : `0${month}`;
+            day = date.getDate() / 10 >= 1 ? date.getDate().toString() : `0${date.getDate()}`;
+            return `${year}-${month}-${day}`;
+        }
+
+        let date = new Date();
+
+        date.setDate(date.getDate() + 1);
+        document.getElementById("ArrivalDate").min = toFormat(date)
+
+        date.setDate(date.getDate() + 1);
+        document.getElementById("DepartureDate").min = toFormat(date)
+
+        document.getElementById("ArrivalDate").onchange = function() {
+            let currentDate = new Date(document.getElementById("ArrivalDate").value)
+            currentDate.setDate(currentDate.getDate() + 1);
+            document.getElementById("DepartureDate").min = toFormat(currentDate)
+            document.getElementById("DepartureDate").value = toFormat(currentDate)
+        }
+    </script>
+}

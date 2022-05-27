@@ -1,4 +1,5 @@
 ﻿using Journey.Data;
+using Journey.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,9 +13,27 @@ namespace Journey.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
+        public IActionResult Index(DateTime? arrivalDate, DateTime? departureDate)
         {
-            var arr = unitOfWork.PlaceRepo.Places().ToArray();
+            
+            DateTime arrivalDateLocal;
+            DateTime departureDateLocal;
+            if (arrivalDate == null || departureDate == null)
+            {
+                arrivalDateLocal = DateTime.Now.AddDays(1);
+                departureDateLocal = DateTime.Now.AddDays(2);
+            }
+            else
+            {
+                arrivalDateLocal = (DateTime)arrivalDate;
+                departureDateLocal = (DateTime)departureDate;
+            }
+
+            IEnumerable<Place> arr = unitOfWork.PlaceRepo
+                .Places(arrivalDateLocal, departureDateLocal).ToArray();
+
+            ViewData["arrivalDate"] = arrivalDateLocal.ToString("yyyy-MM-dd");
+            ViewData["departureDate"] = departureDateLocal.ToString("yyyy-MM-dd");
             return View(arr);
         }
         public IActionResult Details(int? id)
@@ -30,7 +49,7 @@ namespace Journey.Controllers
             }
             return View(obj);
         }
-       
+
 
     }
 }

@@ -107,7 +107,7 @@ namespace Journey.Controllers
             }
             one.IsPaid = true;
             unitOfWork.SaveApp();
-            return RedirectToAction(nameof(Reservations));
+            return RedirectToAction(nameof(Reservations), new { id = one.PlaceId });
         }
         [HttpPost]
         [ValidateAntiForgeryToken]

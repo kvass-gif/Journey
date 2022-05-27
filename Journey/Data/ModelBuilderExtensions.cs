@@ -31,6 +31,7 @@ namespace Journey.Data
                     Id = 1,
                     PlaceName = "Apartment on Kamyanetskaya street",
                     Description = Faker.Lorem.Sentence(),
+
                 },
                 new Place
                 {

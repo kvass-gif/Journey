@@ -18,10 +18,41 @@ namespace Journey.Data.Repositories
                           select a);
             return places;
         }
+        public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate)
+        {
+            var places = (from a in _places
+                          select a).Include(a => a.Reservations).ToArray();
+            ICollection<Place> result = new List<Place>();
+            foreach (var place in places)
+            {
+                if (place.Reservations != null)
+                {
+                    bool resBool = true;
+                    foreach (var reservation in place.Reservations)
+                    {
+                        if (!(reservation.Status == Status.Canceled 
+                            || reservation.Status == Status.Completed))
+                        {
+                            resBool = reservation.DepartureDate < arrivalDate
+                                || departureDate < reservation.ArrivalDate;
+                        }
+                        if (resBool == false)
+                        {
+                            break;
+                        }
+                    }
+                    if (resBool)
+                    {
+                        result.Add(place);
+                    }
+                }
+            }
+            return result;
+        }
         public IQueryable<Place> Places()
         {
             var places = (from a in _places
-                          orderby a.PlaceName
+                          orderby a.Rank
                           select a);
             return places;
         }
