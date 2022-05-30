@@ -18,19 +18,19 @@
             <input asp-for="PlaceName" class="form-control" />
             <span asp-validation-for="PlaceName" class="text-danger"></span>
         </div>
-         <div class="mb-3">
+        <div class="mb-3">
             <label asp-for="PricePerNight"></label>
             <input asp-for="PricePerNight" class="form-control" />
             <span asp-validation-for="PricePerNight" class="text-danger"></span>
         </div>
-         <div class="mb-3">
+        <div class="mb-3">
             <label asp-for="Rank"></label>
             <input asp-for="Rank" type="number" min="1" max="5" class="form-control" />
             <span asp-validation-for="Rank" class="text-danger"></span>
         </div>
-         <div class="mb-3">
+        <div class="mb-3">
             <label asp-for="Address"></label>
-            <input asp-for="Address" min="1" max="5" class="form-control" />
+            <input asp-for="Address" class="form-control" />
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
         <div class="mb-3">
@@ -38,13 +38,30 @@
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
-        <button type="submit" class="btn btn-primary" style="width:150px">
-            Create
-        </button>
-        <a asp-controller="LandLord" asp-action="Index" class="btn btn-secondary" style="width:150px">
-            Back to List
-        </a>
-    </div>
+        <div class="mb-3">
+            <select class="form-select bg-light" aria-label="Default select example" id="CityId" name="CityId"
+                    style="font-size:15px; border: none; padding-top: 0;">
+                @foreach (var item in Model.Cities!)
+                {
+                    <option value="@item.Key" selected>@item.Value</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <select class="form-select bg-light" aria-label="Default select example" id="PlaceTypeId" name="PlaceTypeId"
+                    style="font-size:15px; border: none; padding-top: 0;">
+                @foreach (var item in Model.PlaceTypes!)
+                {
+                    <option value="@item.Key" selected>@item.Value</option>
+                }
+            </select>
+            <button type="submit" class="btn btn-primary" style="width:150px">
+                Create
+            </button>
+            <a asp-controller="LandLord" asp-action="Index" class="btn btn-secondary" style="width:150px">
+                Back to List
+            </a>
+        </div>
 </form>
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />

@@ -79,6 +79,9 @@ namespace Journey.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<int>("PlaceTypeId")
+                        .HasColumnType("int");
+
                     b.Property<int>("PricePerNight")
                         .HasColumnType("int");
 
@@ -92,10 +95,37 @@ namespace Journey.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.HasIndex("PlaceName")
-                        .IsUnique();
+                    b.HasIndex("PlaceName");
+
+                    b.HasIndex("PlaceTypeId");
 
                     b.ToTable("Places");
+                });
+
+            modelBuilder.Entity("Journey.Entities.PlaceType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TypeName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TypeName")
+                        .IsUnique();
+
+                    b.ToTable("PlaceTypes");
                 });
 
             modelBuilder.Entity("Journey.Entities.Reservation", b =>
@@ -145,7 +175,15 @@ namespace Journey.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Journey.Entities.PlaceType", "PlaceType")
+                        .WithMany()
+                        .HasForeignKey("PlaceTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("City");
+
+                    b.Navigation("PlaceType");
                 });
 
             modelBuilder.Entity("Journey.Entities.Reservation", b =>

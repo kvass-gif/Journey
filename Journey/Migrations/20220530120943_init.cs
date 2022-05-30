@@ -25,6 +25,21 @@ namespace Journey.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "PlaceTypes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    TypeName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PlaceTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Places",
                 columns: table => new
                 {
@@ -36,6 +51,7 @@ namespace Journey.Migrations
                     PricePerNight = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
+                    PlaceTypeId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -47,6 +63,12 @@ namespace Journey.Migrations
                         name: "FK_Places_Cities_CityId",
                         column: x => x.CityId,
                         principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Places_PlaceTypes_PlaceTypeId",
+                        column: x => x.PlaceTypeId,
+                        principalTable: "PlaceTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -91,7 +113,17 @@ namespace Journey.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Places_PlaceName",
                 table: "Places",
-                column: "PlaceName",
+                column: "PlaceName");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Places_PlaceTypeId",
+                table: "Places",
+                column: "PlaceTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PlaceTypes_TypeName",
+                table: "PlaceTypes",
+                column: "TypeName",
                 unique: true);
 
             migrationBuilder.CreateIndex(
@@ -110,6 +142,9 @@ namespace Journey.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cities");
+
+            migrationBuilder.DropTable(
+                name: "PlaceTypes");
         }
     }
 }

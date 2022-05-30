@@ -21,13 +21,14 @@ namespace Journey.Controllers
             string sortOrder,
             string currentFilter,
             string searchString,
-            int selectCity,
+            int selectedCity,
+            int selectedType,
             int? pageNumber)
         {
 
             var model = modelCreator.CreateIndexView(
                 arrivalDate, departureDate,
-                sortOrder, currentFilter, searchString, selectCity, pageNumber
+                sortOrder, currentFilter, searchString, selectedCity, selectedType, pageNumber
                 );
 
             return View(model);

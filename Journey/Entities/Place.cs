@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Journey.Entities
 {
+ 
     [Index(nameof(PlaceName))]
     public class Place : Record
     {
@@ -27,8 +28,14 @@ namespace Journey.Entities
         [Required]
         public int CityId { get; set; }
         public City? City { get; set; }
+        public int PlaceTypeId { get; set; }
+        public PlaceType? PlaceType { get; set; }
         public string? AccountId { get; set; }
         [NotMapped]
         public IdentityUser? Account { get; set; }
+        [NotMapped]
+        public Dictionary<int, string>? Cities { get; set; }
+        [NotMapped]
+        public Dictionary<int, string>? PlaceTypes { get; set; }
     }
 }

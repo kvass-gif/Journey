@@ -6,7 +6,6 @@
 @{
     ViewData["Title"] = "LandLord page";
 }
-
 <div class="d-flex justify-content-center">
     <form action="" action="/action_page.php" method="get"
           class="row d-flex flex-wrap align-items-center justify-content-center mb-4 bg-light"
@@ -14,12 +13,19 @@
         <div class="col-auto me-auto">
             <label for="selectCity" class="form-label text-muted fw-bold"
                    style="height: 12px; font-size:12px;">Location</label>
-            <select class="form-select bg-light" aria-label="Default select example" id="selectCity" name="selectCity"
+            <select class="form-select bg-light" aria-label="Default select example" id="selectedCity" name="selectedCity"
                     style="font-size:15px; border: none; padding-top: 0;">
                 <option value="0">All</option>
                 @foreach (var item in Model.Cities)
                 {
-                    <option value="@item.Key">@item.Value</option>
+                    if (Model.Params["SelectedCity"] == @item.Key.ToString())
+                    {
+                        <option value="@item.Key" selected>@item.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
                 }
             </select>
         </div>
@@ -43,11 +49,22 @@
         <div class="col-auto me-auto">
             <label for="abode" class="form-label text-muted fw-bold"
                    style="height: 12px; font-size:12px">Abode</label>
-            <select class="form-select bg-light" aria-label="Default select example" id="abode"
+            <select class="form-select bg-light" aria-label="Default select example" id="selectedType" name="selectedType"
                     style="font-size:15px; border: none; padding-top: 0;">
-                <option selected>An entire place</option>
-                <option value="1">A private room</option>
-                <option value="2">A shared room</option>
+                <option value="0">All</option>
+                @foreach (var item in Model.Types)
+                {
+
+                    if (Model.Params["SelectedType"] == @item.Key.ToString())
+                    {
+                        <option value="@item.Key" selected>@item.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                }
+
             </select>
         </div>
         <div class="col-auto me-auto">
@@ -58,19 +75,58 @@
             </button>
         </div>
     </form>
-
 </div>
-<div class="d-flex justify-content-start">
+<div class="d-flex justify-content-start align-content-around">
     <form asp-action="Index" method="get">
+        <input type="hidden" name="sortOrder" value="@Model.Params["CurrentSort"]" />
+        <input type="hidden" name="pageNumber" value="@Model.PaginatedList.PageIndex" />
+        <input type="hidden" name="selectedCity" value="@Model.Params["SelectedCity"]" />
+        <input type="hidden" name="selectedType" value="@Model.Params["SelectedType"]" />
+        <input type="hidden" name="arrivalDate" value="@Model.Params["ArrivalDate"]" />
+        <input type="hidden" name="departureDate" value="@Model.Params["DepartureDate"]" />
         <div class="form-actions no-color">
             <p>
                 Find by name: <input type="text" name="SearchString" value="@Model.Params["CurrentFilter"]"
                                      class="form-control" style="width:300px; display:inline-block;" />
-                <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@Model.Params["PriceSortParm"]" asp-route-currentFilter="@Model.Params["CurrentFilter"]">SortPrice</a>
-                <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@Model.Params["RankSortParm"]" asp-route-currentFilter="@Model.Params["CurrentFilter"]">SortRank</a>
             </p>
         </div>
     </form>
+    <div class="ms-3">
+        <div class="dropdown">
+            <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                Sort By:
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                <li>
+                    <a class="dropdown-item"
+                       asp-action="Index"
+                       asp-route-sortOrder="@Model.Params["PriceSortParm"]"
+                       asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-selectedType="@Model.Params["SelectedType"]">Price</a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       asp-action="Index"
+                       asp-route-sortOrder="@Model.Params["RankSortParm"]"
+                       asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-selectedType="@Model.Params["SelectedType"]">Rank</a>
+                </li>
+                <li>
+                    <a class="dropdown-item"
+                       asp-action="Index"
+                       asp-route-sortOrder="@Model.Params["NewestSortParm"]"
+                       asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-selectedType="@Model.Params["SelectedType"]">Newest</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </div>
 <h2>Places</h2>
 <table class="table">
@@ -94,6 +150,12 @@
             <th>
                 Address
             </th>
+            <th>
+                Type
+            </th>
+            <th>
+                CreatedAt
+            </th>
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
             {
                 <th>Action</th>
@@ -110,6 +172,8 @@
                 <td>@item.Rank</td>
                 <td>@item.City!.CityName</td>
                 <td>@item.Address</td>
+                <td>@item.PlaceType!.TypeName</td>
+                <td>@item.CreatedAt</td>
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
                 {
                     <td>
@@ -127,17 +191,6 @@
     var prevDisabled = !Model.PaginatedList.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.PaginatedList.HasNextPage ? "disabled" : "";
 }
-@*<form asp-action="Index" method="get" style="display:inline-block;">
-    <input type="hidden" name="sortOrder" value="@Model.Params["CurrentSort"]" />
-    <input type="hidden" name="currentFilter" value="@Model.Params["CurrentFilter"]" />
-    <div class="form-actions no-color">
-        <p>
-            CurrentPage: <input type="number" name="pageNumber" value="@Model.PaginatedList.PageIndex"
-                                class="form-control" style="width:150px; display:inline-block;" />
-            <input type="submit" value="Go" class="btn btn-primary" />
-        </p>
-    </div>
-</form>*@
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item">
@@ -145,33 +198,39 @@
                asp-route-sortOrder="@Model.Params["CurrentSort"]"
                asp-route-pageNumber="@(Model.PaginatedList.PageIndex - 1)"
                asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+               asp-route-selectedCity="@Model.Params["SelectedCity"]"
+               asp-route-selectedType="@Model.Params["SelectedType"]"
                class="btn btn-default @prevDisabled">
                 Previous
             </a>
         </li>
         @for (int i = 1; i <= Model.PaginatedList.TotalPages; i++)
         {
-            <li class="page-item"><a asp-action="Index"
+            <li class="page-item">
+                <a asp-action="Index"
                asp-route-sortOrder="@Model.Params["CurrentSort"]"
                asp-route-pageNumber="@i"
-               asp-route-currentFilter="@Model.Params["CurrentFilter"]" class="page-link" >@i</a></li>
+               asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+               asp-route-selectedCity="@Model.Params["SelectedCity"]"
+               asp-route-selectedType="@Model.Params["SelectedType"]"
+               class="page-link">@i</a>
+            </li>
         }
         <li class="page-item">
             <a asp-action="Index"
                asp-route-sortOrder="@Model.Params["CurrentSort"]"
                asp-route-pageNumber="@(Model.PaginatedList.PageIndex + 1)"
                asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+               asp-route-selectedCity="@Model.Params["SelectedCity"]"
+               asp-route-selectedType="@Model.Params["SelectedType"]"
                class="btn btn-default @nextDisabled">
                 Next
             </a>
         </li>
     </ul>
 </nav>
-
-
 @section Scripts{
     <script>
-
 
         function toFormat(date) {
             var year = date.getFullYear();

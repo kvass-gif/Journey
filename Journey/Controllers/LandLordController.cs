@@ -1,5 +1,6 @@
 ﻿using Journey.Data;
 using Journey.Entities;
+using Journey.ViewModels.LandLord;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,11 @@ namespace Journey.Controllers
     public class LandLordController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly LandLordViewCreator modelCreator;
         public LandLordController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            modelCreator = new LandLordViewCreator(unitOfWork);
         }
         public IActionResult Index()
         {
@@ -23,7 +26,8 @@ namespace Journey.Controllers
         }
         public IActionResult RegisterObject()
         {
-            return View();
+            var model = modelCreator.GetViewModel();
+            return View(model);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -47,6 +51,7 @@ namespace Journey.Controllers
                         "see your system administrator.");
                 }
             }
+            var model = modelCreator.GetViewModel();
             return View(place);
         }
         public IActionResult Reservations(int? id)

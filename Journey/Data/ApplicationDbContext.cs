@@ -8,6 +8,7 @@ namespace Journey.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         { }
         public DbSet<City> Cities { get; set; }
+        public DbSet<PlaceType> PlaceTypes { get; set; }
         public DbSet<Place> Places { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

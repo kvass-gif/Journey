@@ -20,21 +20,27 @@ namespace Journey.ViewModels.Home
             }
             return citySelectedList;
         }
-        private IEnumerable<Place> serchSortAction(string searchString, string sortOrder,
-            DateTime arrivalDate, DateTime departureDate, int selectCity)
+        private Dictionary<int, string> typeList()
         {
-            var objects = unitOfWork.PlaceRepo.Places(arrivalDate, departureDate, selectCity);
+            var citySelectedList = new Dictionary<int, string>();
+            foreach (var item in unitOfWork.TypeRepo.Types())
+            {
+                citySelectedList.Add(item.Id, item.TypeName);
+            }
+            return citySelectedList;
+        }
+        private IEnumerable<Place> serchSortAction(string searchString, string sortOrder,
+            DateTime arrivalDate, DateTime departureDate, int selectCity, int selectType)
+        {
+            var objects = unitOfWork.PlaceRepo.Places(arrivalDate, departureDate, selectCity, selectType);
             if (!string.IsNullOrEmpty(searchString))
             {
                 objects = objects.Where(s => s.PlaceName.Contains(searchString));
             }
             switch (sortOrder)
             {
-                case "Rank_desc": objects = objects.OrderBy(s => s.Rank); break;
-                case "Price": objects = objects.OrderBy(s => s.PricePerNight); break;
                 case "Price_desc": objects = objects.OrderByDescending(s => s.PricePerNight); break;
-                case "CreatedAt": objects = objects.OrderBy(s => s.CreatedAt); break;
-                case "CreatedAt_desc": objects = objects.OrderByDescending(s => s.CreatedAt); break;
+                case "Newest_desc": objects = objects.OrderByDescending(s => s.CreatedAt); break;
                 default: objects = objects.OrderByDescending(s => s.Rank); break;
             }
             return objects;
@@ -45,6 +51,7 @@ namespace Journey.ViewModels.Home
             string currentFilter,
             string searchString,
             int selectCity,
+            int selectType,
             int? pageNumber)
         {
             DateTime arrivalDateLocal;
@@ -63,12 +70,15 @@ namespace Journey.ViewModels.Home
             var indexView = new IndexViewModel<Place>();
             indexView.Params.Add("ArrivalDate", arrivalDateLocal.ToString("yyyy-MM-dd"));
             indexView.Params.Add("DepartureDate", departureDateLocal.ToString("yyyy-MM-dd"));
+            indexView.Params.Add("SelectedCity", selectCity.ToString());
+            indexView.Params.Add("SelectedType", selectType.ToString());
             indexView.Cities = citiesList();
+            indexView.Types = typeList();
 
             indexView.Params.Add("CurrentSort", sortOrder);
             indexView.Params.Add("RankSortParm", string.IsNullOrEmpty(sortOrder) ? "Rank_desc" : "");
-            indexView.Params.Add("PriceSortParm", sortOrder == "Price" ? "Price_desc" : "Price");
-            indexView.Params.Add("CreatedAtSortParm", sortOrder == "CreatedAt" ? "CreatedAt_desc" : "CreatedAt");
+            indexView.Params.Add("PriceSortParm", "Price_desc");
+            indexView.Params.Add("NewestSortParm", "Newest_desc");
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -79,7 +89,7 @@ namespace Journey.ViewModels.Home
             }
             indexView.Params.Add("CurrentFilter", searchString);
 
-            var objects = serchSortAction(searchString, sortOrder, arrivalDateLocal, departureDateLocal , selectCity);
+            var objects = serchSortAction(searchString, sortOrder, arrivalDateLocal, departureDateLocal , selectCity, selectType);
             int pageSize = 20;
             indexView.PaginatedList = PaginatedList<Place>.Create(objects, pageNumber ?? 1, pageSize);
             return indexView;

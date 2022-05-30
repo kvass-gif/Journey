@@ -1,4 +1,5 @@
 ﻿using Journey.Data.Repositories;
+using Journey.Entities;
 
 namespace Journey.Data
 {
@@ -8,6 +9,7 @@ namespace Journey.Data
         private readonly AccountDbContext account;
 
         private CityRepo cityRepo;
+        private TypeRepo typeRepo;
         private PlaceRepo placeRepo;
         private ReservationRepo reservationRepo;
         public UnitOfWork(ApplicationDbContext app, AccountDbContext account)
@@ -24,6 +26,17 @@ namespace Journey.Data
                     cityRepo = new CityRepo(app);
                 }
                 return cityRepo;
+            }
+        }
+        public TypeRepo TypeRepo
+        {
+            get
+            {
+                if (typeRepo == null)
+                {
+                    typeRepo = new TypeRepo(app);
+                }
+                return typeRepo;
             }
         }
         public PlaceRepo PlaceRepo

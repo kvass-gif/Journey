@@ -21,25 +21,27 @@ namespace Journey.Data.Repositories
                           select a);
             return places;
         }
-        public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate, int cityId)
+        public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate, int cityId, int typeId)
         {
             Place[] places;
+            var query = (from a in _places
+                         select a);
             if (cityId != 0)
             {
-                places = (from a in _places
-                          where a.CityId == cityId
-                          select a).Include(a => a.City)
-                          .Include(a => a.Reservations).ToArray();
+                query = (from a in query
+                         where a.CityId == cityId
+                         select a);
             }
-            else
+            if(typeId != 0)
             {
-                places = (from a in _places
-                          select a).Include(a => a.City)
-                         .Include(a => a.Reservations).ToArray();
+                query = (from a in query
+                         where a.PlaceTypeId == typeId
+                         select a);
             }
-
+           
+            query = query.Include(a => a.City).Include(a => a.Reservations);
             List<Place> result = new List<Place>();
-            foreach (var place in places)
+            foreach (var place in query)
             {
                 if (place.Reservations != null)
                 {

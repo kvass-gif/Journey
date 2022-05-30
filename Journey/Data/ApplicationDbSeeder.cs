@@ -21,12 +21,24 @@ namespace Journey.Data
         {
             SeedCities(applicationDbContext.Cities);
             applicationDbContext.SaveChanges();
+            SeedTypes(applicationDbContext.PlaceTypes);
+            applicationDbContext.SaveChanges();
             var landLords = FindUsersByRole(accountDbContext, "LandLord");
             SeedPlaces(applicationDbContext.Places, landLords);
             applicationDbContext.SaveChanges();
             var tenants = FindUsersByRole(accountDbContext, "Tenant");
             SeedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
             applicationDbContext.SaveChanges();
+        }
+
+        private static void SeedTypes(DbSet<PlaceType> types)
+        {
+            if (!types.Any())
+            {
+                types.Add(new PlaceType() { TypeName = "An entire place" });
+                types.Add(new PlaceType() { TypeName = "A private room" });
+                types.Add(new PlaceType() { TypeName = "A shared room" });
+            }
         }
 
         private static void SeedCities(DbSet<City> cities)
@@ -55,6 +67,7 @@ namespace Journey.Data
                         PricePerNight = Faker.RandomNumber.Next(1, 100),
                         Address = Faker.Address.StreetAddress(),
                         CityId = Faker.RandomNumber.Next(1, 5),
+                        PlaceTypeId = Faker.RandomNumber.Next(1, 3),
                         AccountId = landLordUsers[Faker.RandomNumber.Next(0, landLordUsers.Length - 1)].Id
                     });
                 }
