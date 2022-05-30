@@ -28,6 +28,11 @@
             <input asp-for="Rank" type="number" min="1" max="5" class="form-control" />
             <span asp-validation-for="Rank" class="text-danger"></span>
         </div>
+         <div class="mb-3">
+            <label asp-for="Address"></label>
+            <input asp-for="Address" min="1" max="5" class="form-control" />
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
         <div class="mb-3">
             <label asp-for="Description"></label>
             <textarea asp-for="Description" class="form-control"></textarea>

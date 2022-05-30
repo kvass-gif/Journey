@@ -56,9 +56,20 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<UnitOfWork>();
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
+using (var serviceScope = app.Services.CreateScope())
+{
+    var services = serviceScope.ServiceProvider;
+    var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var accountDbContext = services.GetRequiredService<AccountDbContext>();
+    var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    AccountSeeder.SeedData(userManager, roleManager);
+    ApplicationDbSeeder.SeedData(dbContext, accountDbContext);
+}
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.UseStaticFiles();
 //app.MapControllerRoute(
 //    name: "default",

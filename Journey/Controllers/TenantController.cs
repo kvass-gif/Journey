@@ -17,8 +17,7 @@ namespace Journey.Controllers
         }
         public IActionResult Index()
         {
-            //var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var accountId = "a8eddd62-a9b5-4f1f-9b9c-68f8abdf0e30";
+            var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var arr = unitOfWork.ReservationRepo.ReservationsByTenantId(accountId).ToArray();
             foreach (var item in arr)
@@ -45,7 +44,7 @@ namespace Journey.Controllers
             {
                 try
                 {
-                    reservation.AccountId = "a8eddd62-a9b5-4f1f-9b9c-68f8abdf0e30";
+                    reservation.AccountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     unitOfWork.ReservationRepo.Add(reservation);
                     unitOfWork.SaveApp();
                     return RedirectToAction(nameof(Index));

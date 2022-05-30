@@ -33,6 +33,10 @@ namespace Journey.Migrations.ApplicationDb
                     b.Property<string>("AccountId")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 

@@ -64,10 +64,16 @@
                 PlaceName
             </th>
             <th>
+                LandLord
+            </th>
+            <th>
                 PricePerNight
             </th>
             <th>
                 Rank
+            </th>
+            <th>
+                Address
             </th>
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
             {
@@ -80,8 +86,10 @@
         {
             <tr>
                 <td><a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">@item.PlaceName</a></td>
+                <td>@item.Account!.UserName</td>
                 <td>@item.PricePerNight</td>
                 <td>@item.Rank</td>
+                <td>@item.Address</td>
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
                 {
                     <td>

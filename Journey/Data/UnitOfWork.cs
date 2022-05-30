@@ -20,7 +20,7 @@ namespace Journey.Data
             {
                 if (placeRepo == null)
                 {
-                    placeRepo = new PlaceRepo(app);
+                    placeRepo = new PlaceRepo(app, account);
                 }
                 return placeRepo;
             }

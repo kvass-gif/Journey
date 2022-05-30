@@ -77,10 +77,6 @@ namespace Journey.Controllers
                         && ((Status)stat == Status.Canceled)
                         )
                     {
-                        if(res.Status == Status.InPlace && (Status)stat == Status.Waiting)
-                        {
-                            continue;
-                        }
                         dic.Add((int)stat, ((Status)stat).ToString());
                     }
                 }

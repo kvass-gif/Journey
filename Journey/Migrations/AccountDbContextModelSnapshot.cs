@@ -47,22 +47,6 @@ namespace Journey.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "6a8d84c0-b8df-42f1-a286-93b77b2ceda9",
-                            ConcurrencyStamp = "ca51d7e0-1ec7-442d-9876-2123d6b1d7cd",
-                            Name = "Tenant",
-                            NormalizedName = "TENANT"
-                        },
-                        new
-                        {
-                            Id = "c735ff1a-033b-41f4-a083-589f50b52f14",
-                            ConcurrencyStamp = "efc864ad-2377-4c48-b478-7d16ef049b53",
-                            Name = "LandLord",
-                            NormalizedName = "LANDLORD"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

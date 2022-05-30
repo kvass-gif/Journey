@@ -1,4 +1,5 @@
 ﻿using Journey.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Journey.Data.Repositories
@@ -6,9 +7,11 @@ namespace Journey.Data.Repositories
     public class PlaceRepo
     {
         private readonly DbSet<Place> _places;
-        public PlaceRepo(ApplicationDbContext appDbContext)
+        private readonly DbSet<IdentityUser> _identityUsers;
+        public PlaceRepo(ApplicationDbContext appDbContext, AccountDbContext accountDbContext)
         {
             _places = appDbContext.Places;
+            _identityUsers = accountDbContext.Users;
         }
         public IQueryable<Place> Places(string accountId)
         {
@@ -21,8 +24,9 @@ namespace Journey.Data.Repositories
         public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate)
         {
             var places = (from a in _places
+                          orderby a.Rank descending
                           select a).Include(a => a.Reservations).ToArray();
-            ICollection<Place> result = new List<Place>();
+            List<Place> result = new List<Place>();
             foreach (var place in places)
             {
                 if (place.Reservations != null)
@@ -47,6 +51,12 @@ namespace Journey.Data.Repositories
                     }
                 }
             }
+            for (int i = 0; i < result.Count; i++)
+            {
+                var id = result.ElementAt(i).AccountId;
+                result.ElementAt(i).Account = _identityUsers.SingleOrDefault(a => a.Id == id);
+            }
+            
             return result;
         }
         public IQueryable<Place> Places()

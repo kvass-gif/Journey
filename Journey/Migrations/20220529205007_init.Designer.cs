@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20220524115727_seed")]
-    partial class seed
+    [Migration("20220529205007_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,20 +49,6 @@ namespace Journey.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "9d6bb834-07eb-4c47-9128-9bf0145f8597",
-                            ConcurrencyStamp = "0699de06-f0da-4004-a7c4-94e791be7c1e",
-                            Name = "Tenant"
-                        },
-                        new
-                        {
-                            Id = "3aebe9a1-b211-45f9-86e2-0537259c618d",
-                            ConcurrencyStamp = "f9fccf24-0e19-4a31-861f-55be5511946f",
-                            Name = "LandLord"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

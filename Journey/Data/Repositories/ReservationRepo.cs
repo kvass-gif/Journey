@@ -14,12 +14,13 @@ namespace Journey.Data.Repositories
             _reservations = appDbContext.Reservations;
             _identityUsers = accountDbContext.Users;
         }
-        public IQueryable<Reservation> ReservationsByTenantId(string accountId)
+        public IEnumerable<Reservation> ReservationsByTenantId(string accountId)
         {
             var reservations = (from a in _reservations
                                 where a.AccountId == accountId
-                                orderby a.Place!.PlaceName
+                                orderby a.Status
                                 select a).Include(a => a.Place);
+            
             return reservations;
         }
         public IEnumerable<Reservation> ReservationsByPlaceId(int placeId)
@@ -29,7 +30,7 @@ namespace Journey.Data.Repositories
                        select a).Include(a => a.Place).ToArray();
             var reservations = from r in arr
                                join i in _identityUsers on r.AccountId equals i.Id
-                               orderby i.UserName
+                               orderby r.DepartureDate
                                select new
                                {
                                    Reservation = r,

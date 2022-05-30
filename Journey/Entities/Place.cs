@@ -21,6 +21,8 @@ namespace Journey.Entities
         [Required]
         [DataType(DataType.Currency)]
         public int PricePerNight { get; set; }
+        [Required]
+        public string Address { get; set; }
         public ICollection<Reservation>? Reservations { get; set; }
 
         public string? AccountId { get; set; }

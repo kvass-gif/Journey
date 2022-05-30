@@ -19,7 +19,7 @@ namespace Journey.Entities
         [DataType(DataType.Date)]
         public DateTime DepartureDate { get; set; }
         public bool IsPaid { get; set; } = false;
-        public Status Status { get; set; } =Status.Waiting;
+        public Status Status { get; set; } = Status.Waiting;
         public int PlaceId { get; set; }
         public Place? Place { get; set; }
         public string? AccountId { get; set; }
