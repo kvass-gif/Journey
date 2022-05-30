@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Journey.Migrations.ApplicationDb
+namespace Journey.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220529205039_init")]
+    [Migration("20220530080830_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,32 @@ namespace Journey.Migrations.ApplicationDb
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Journey.Entities.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CityName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityName")
+                        .IsUnique();
+
+                    b.ToTable("Cities");
+                });
 
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
@@ -38,6 +64,9 @@ namespace Journey.Migrations.ApplicationDb
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -62,6 +91,8 @@ namespace Journey.Migrations.ApplicationDb
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CityId");
 
                     b.HasIndex("PlaceName")
                         .IsUnique();
@@ -108,6 +139,17 @@ namespace Journey.Migrations.ApplicationDb
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("Journey.Entities.Place", b =>
+                {
+                    b.HasOne("Journey.Entities.City", "City")
+                        .WithMany("Places")
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
             modelBuilder.Entity("Journey.Entities.Reservation", b =>
                 {
                     b.HasOne("Journey.Entities.Place", "Place")
@@ -117,6 +159,11 @@ namespace Journey.Migrations.ApplicationDb
                         .IsRequired();
 
                     b.Navigation("Place");
+                });
+
+            modelBuilder.Entity("Journey.Entities.City", b =>
+                {
+                    b.Navigation("Places");
                 });
 
             modelBuilder.Entity("Journey.Entities.Place", b =>

@@ -3,12 +3,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Journey.Migrations.ApplicationDb
+namespace Journey.Migrations
 {
     public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CityName = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Places",
                 columns: table => new
@@ -20,6 +35,7 @@ namespace Journey.Migrations.ApplicationDb
                     Rank = table.Column<int>(type: "int", nullable: false),
                     PricePerNight = table.Column<int>(type: "int", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -27,6 +43,12 @@ namespace Journey.Migrations.ApplicationDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Places", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Places_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -56,6 +78,17 @@ namespace Journey.Migrations.ApplicationDb
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Cities_CityName",
+                table: "Cities",
+                column: "CityName",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Places_CityId",
+                table: "Places",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Places_PlaceName",
                 table: "Places",
                 column: "PlaceName",
@@ -74,6 +107,9 @@ namespace Journey.Migrations.ApplicationDb
 
             migrationBuilder.DropTable(
                 name: "Places");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
         }
     }
 }

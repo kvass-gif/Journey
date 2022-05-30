@@ -21,11 +21,23 @@ namespace Journey.Data.Repositories
                           select a);
             return places;
         }
-        public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate)
+        public IEnumerable<Place> Places(DateTime arrivalDate, DateTime departureDate, int cityId)
         {
-            var places = (from a in _places
-                          orderby a.Rank descending
-                          select a).Include(a => a.Reservations).ToArray();
+            Place[] places;
+            if (cityId != 0)
+            {
+                places = (from a in _places
+                          where a.CityId == cityId
+                          select a).Include(a => a.City)
+                          .Include(a => a.Reservations).ToArray();
+            }
+            else
+            {
+                places = (from a in _places
+                          select a).Include(a => a.City)
+                         .Include(a => a.Reservations).ToArray();
+            }
+
             List<Place> result = new List<Place>();
             foreach (var place in places)
             {
@@ -34,7 +46,7 @@ namespace Journey.Data.Repositories
                     bool resBool = true;
                     foreach (var reservation in place.Reservations)
                     {
-                        if (!(reservation.Status == Status.Canceled 
+                        if (!(reservation.Status == Status.Canceled
                             || reservation.Status == Status.Completed))
                         {
                             resBool = reservation.DepartureDate < arrivalDate
@@ -56,7 +68,7 @@ namespace Journey.Data.Repositories
                 var id = result.ElementAt(i).AccountId;
                 result.ElementAt(i).Account = _identityUsers.SingleOrDefault(a => a.Id == id);
             }
-            
+
             return result;
         }
         public IQueryable<Place> Places()
@@ -71,7 +83,7 @@ namespace Journey.Data.Repositories
         {
             var place = (from c in _places
                          where c.Id == id
-                         select c).SingleOrDefault();
+                         select c).Include(a => a.City).SingleOrDefault();
             return place;
         }
         public void Add(Place obj)

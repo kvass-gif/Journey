@@ -1,5 +1,6 @@
 ﻿using Journey.Data;
 using Journey.Entities;
+using Journey.ViewModels.Home;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,33 +9,28 @@ namespace Journey.Controllers
     public class HomeController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly HomeViewCreator modelCreator;
 
         public HomeController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            modelCreator = new HomeViewCreator(unitOfWork);
         }
-        public IActionResult Index(DateTime? arrivalDate, DateTime? departureDate)
+        public IActionResult Index(
+            DateTime? arrivalDate, DateTime? departureDate,
+            string sortOrder,
+            string currentFilter,
+            string searchString,
+            int selectCity,
+            int? pageNumber)
         {
-            
-            DateTime arrivalDateLocal;
-            DateTime departureDateLocal;
-            if (arrivalDate == null || departureDate == null)
-            {
-                arrivalDateLocal = DateTime.Now.AddDays(1);
-                departureDateLocal = DateTime.Now.AddDays(2);
-            }
-            else
-            {
-                arrivalDateLocal = (DateTime)arrivalDate;
-                departureDateLocal = (DateTime)departureDate;
-            }
 
-            IEnumerable<Place> arr = unitOfWork.PlaceRepo
-                .Places(arrivalDateLocal, departureDateLocal).ToArray();
+            var model = modelCreator.CreateIndexView(
+                arrivalDate, departureDate,
+                sortOrder, currentFilter, searchString, selectCity, pageNumber
+                );
 
-            ViewData["arrivalDate"] = arrivalDateLocal.ToString("yyyy-MM-dd");
-            ViewData["departureDate"] = departureDateLocal.ToString("yyyy-MM-dd");
-            return View(arr);
+            return View(model);
         }
         public IActionResult Details(int? id)
         {

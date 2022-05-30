@@ -1,6 +1,7 @@
 ﻿@using Journey.Entities
+@using Journey.ViewModels
 @using Microsoft.AspNetCore.Identity
-@model ICollection<Place>
+@model IndexViewModel<Place>
 @inject SignInManager<IdentityUser> SignInManager
 @{
     ViewData["Title"] = "LandLord page";
@@ -13,12 +14,13 @@
         <div class="col-auto me-auto">
             <label for="selectCity" class="form-label text-muted fw-bold"
                    style="height: 12px; font-size:12px;">Location</label>
-            <select class="form-select bg-light" aria-label="Default select example" id="selectCity"
+            <select class="form-select bg-light" aria-label="Default select example" id="selectCity" name="selectCity"
                     style="font-size:15px; border: none; padding-top: 0;">
-                <option selected>Country->City->Name</option>
-                <option value="1">Country->City->Name</option>
-                <option value="2">Country->City->Name</option>
-                <option value="3">Country->City->Name</option>
+                <option value="0">All</option>
+                @foreach (var item in Model.Cities)
+                {
+                    <option value="@item.Key">@item.Value</option>
+                }
             </select>
         </div>
         <div class="col-auto d-flex me-auto"
@@ -26,13 +28,15 @@
             <div class="me-1">
                 <label for="exampleFormControlInput1" class="form-label text-muted fw-bold"
                        style="height: 12px; font-size:12px">Check in</label>
-                <input type="date" class="form-control bg-light" id="ArrivalDate" name="arrivalDate" value="@ViewData["arrivalDate"]"
+                <input type="date" class="form-control bg-light" id="ArrivalDate" name="arrivalDate"
+                       value="@Model.Params["ArrivalDate"]"
                        style="font-size:15px; border: none; padding-top: 0;">
             </div>
             <div>
                 <label for="exampleFormControlInput2" class="form-label text-muted fw-bold"
                        style="height: 12px; font-size:12px">Check out</label>
-                <input type="date" class="form-control bg-light" id="DepartureDate" name="departureDate" value="@ViewData["departureDate"]"
+                <input type="date" class="form-control bg-light" id="DepartureDate" name="departureDate"
+                       value="@Model.Params["DepartureDate"]"
                        style="font-size:15px; border: none; padding-top: 0;">
             </div>
         </div>
@@ -54,8 +58,20 @@
             </button>
         </div>
     </form>
-</div>
 
+</div>
+<div class="d-flex justify-content-start">
+    <form asp-action="Index" method="get">
+        <div class="form-actions no-color">
+            <p>
+                Find by name: <input type="text" name="SearchString" value="@Model.Params["CurrentFilter"]"
+                                     class="form-control" style="width:300px; display:inline-block;" />
+                <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@Model.Params["PriceSortParm"]" asp-route-currentFilter="@Model.Params["CurrentFilter"]">SortPrice</a>
+                <a class="btn btn-dark" asp-action="Index" asp-route-sortOrder="@Model.Params["RankSortParm"]" asp-route-currentFilter="@Model.Params["CurrentFilter"]">SortRank</a>
+            </p>
+        </div>
+    </form>
+</div>
 <h2>Places</h2>
 <table class="table">
     <thead>
@@ -73,6 +89,9 @@
                 Rank
             </th>
             <th>
+                City
+            </th>
+            <th>
                 Address
             </th>
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
@@ -82,13 +101,14 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.PaginatedList)
         {
             <tr>
                 <td><a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">@item.PlaceName</a></td>
                 <td>@item.Account!.UserName</td>
                 <td>@item.PricePerNight</td>
                 <td>@item.Rank</td>
+                <td>@item.City!.CityName</td>
                 <td>@item.Address</td>
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
                 {
@@ -103,6 +123,52 @@
         }
     </tbody>
 </table>
+@{
+    var prevDisabled = !Model.PaginatedList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PaginatedList.HasNextPage ? "disabled" : "";
+}
+@*<form asp-action="Index" method="get" style="display:inline-block;">
+    <input type="hidden" name="sortOrder" value="@Model.Params["CurrentSort"]" />
+    <input type="hidden" name="currentFilter" value="@Model.Params["CurrentFilter"]" />
+    <div class="form-actions no-color">
+        <p>
+            CurrentPage: <input type="number" name="pageNumber" value="@Model.PaginatedList.PageIndex"
+                                class="form-control" style="width:150px; display:inline-block;" />
+            <input type="submit" value="Go" class="btn btn-primary" />
+        </p>
+    </div>
+</form>*@
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-action="Index"
+               asp-route-sortOrder="@Model.Params["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PaginatedList.PageIndex - 1)"
+               asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+               class="btn btn-default @prevDisabled">
+                Previous
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.PaginatedList.TotalPages; i++)
+        {
+            <li class="page-item"><a asp-action="Index"
+               asp-route-sortOrder="@Model.Params["CurrentSort"]"
+               asp-route-pageNumber="@i"
+               asp-route-currentFilter="@Model.Params["CurrentFilter"]" class="page-link" >@i</a></li>
+        }
+        <li class="page-item">
+            <a asp-action="Index"
+               asp-route-sortOrder="@Model.Params["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PaginatedList.PageIndex + 1)"
+               asp-route-currentFilter="@Model.Params["CurrentFilter"]"
+               class="btn btn-default @nextDisabled">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
 @section Scripts{
     <script>
 

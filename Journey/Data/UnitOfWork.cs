@@ -7,12 +7,24 @@ namespace Journey.Data
         private readonly ApplicationDbContext app;
         private readonly AccountDbContext account;
 
+        private CityRepo cityRepo;
         private PlaceRepo placeRepo;
         private ReservationRepo reservationRepo;
         public UnitOfWork(ApplicationDbContext app, AccountDbContext account)
         {
             this.app = app;
             this.account = account;
+        }
+        public CityRepo CityRepo
+        {
+            get
+            {
+                if (cityRepo == null)
+                {
+                    cityRepo = new CityRepo(app);
+                }
+                return cityRepo;
+            }
         }
         public PlaceRepo PlaceRepo
         {

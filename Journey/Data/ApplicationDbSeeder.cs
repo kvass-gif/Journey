@@ -19,6 +19,8 @@ namespace Journey.Data
         }
         public static void SeedData(ApplicationDbContext applicationDbContext, AccountDbContext accountDbContext)
         {
+            SeedCities(applicationDbContext.Cities);
+            applicationDbContext.SaveChanges();
             var landLords = FindUsersByRole(accountDbContext, "LandLord");
             SeedPlaces(applicationDbContext.Places, landLords);
             applicationDbContext.SaveChanges();
@@ -26,6 +28,19 @@ namespace Journey.Data
             SeedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
             applicationDbContext.SaveChanges();
         }
+
+        private static void SeedCities(DbSet<City> cities)
+        {
+            if (!cities.Any())
+            {
+                cities.Add(new City(){CityName = "Tokyo"});
+                cities.Add(new City(){CityName = "Delhi" });
+                cities.Add(new City(){CityName = "Shanghai" });
+                cities.Add(new City(){CityName = "Sao Paulo" });
+                cities.Add(new City(){CityName = "Mexico City" });
+            }
+        }
+
         public static void SeedPlaces(DbSet<Place> places, IdentityUser[] landLordUsers)
         {
             if (!places.Any())
@@ -38,7 +53,8 @@ namespace Journey.Data
                         Description = Faker.Lorem.Sentence(),
                         Rank = Faker.RandomNumber.Next(1, 5),
                         PricePerNight = Faker.RandomNumber.Next(1, 100),
-                        Address = Faker.Address.City() + ',' + Faker.Address.StreetAddress(),
+                        Address = Faker.Address.StreetAddress(),
+                        CityId = Faker.RandomNumber.Next(1, 5),
                         AccountId = landLordUsers[Faker.RandomNumber.Next(0, landLordUsers.Length - 1)].Id
                     });
                 }
