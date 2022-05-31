@@ -20,7 +20,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="PricePerNight"></label>
-            <input asp-for="PricePerNight" class="form-control" />
+            <input asp-for="PricePerNight"  min="1" class="form-control" />
             <span asp-validation-for="PricePerNight" class="text-danger"></span>
         </div>
         <div class="mb-3">
@@ -30,7 +30,7 @@
         </div>
         <div class="mb-3">
             <label asp-for="BedsCount"></label>
-            <input asp-for="BedsCount" type="number" min="1" max="5" class="form-control" />
+            <input asp-for="BedsCount" type="number" min="1" max="10" class="form-control" />
             <span asp-validation-for="BedsCount" class="text-danger"></span>
         </div>
         <div class="mb-3">

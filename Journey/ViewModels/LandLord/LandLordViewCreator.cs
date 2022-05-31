@@ -35,6 +35,9 @@ namespace Journey.ViewModels.LandLord
             var viewModel = new Place();
             viewModel.Cities = citiesList();
             viewModel.PlaceTypes = placeTypeList();
+            viewModel.BedsCount = 1;
+            viewModel.PricePerNight = 1;
+            viewModel.Rank = 1;
             return viewModel;
         }
     }
