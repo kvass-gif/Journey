@@ -45,11 +45,11 @@ namespace Journey.Data
         {
             if (!cities.Any())
             {
-                cities.Add(new City(){CityName = "Tokyo"});
-                cities.Add(new City(){CityName = "Delhi" });
-                cities.Add(new City(){CityName = "Shanghai" });
-                cities.Add(new City(){CityName = "Sao Paulo" });
-                cities.Add(new City(){CityName = "Mexico City" });
+                cities.Add(new City() { CityName = "Tokyo" });
+                cities.Add(new City() { CityName = "Delhi" });
+                cities.Add(new City() { CityName = "Shanghai" });
+                cities.Add(new City() { CityName = "Sao Paulo" });
+                cities.Add(new City() { CityName = "Mexico City" });
             }
         }
 
@@ -59,7 +59,7 @@ namespace Journey.Data
             {
                 for (int i = 0; i < 100; i++)
                 {
-                    places.Add(new Place()
+                    var place = new Place()
                     {
                         PlaceName = Faker.Company.Name(),
                         Description = Faker.Lorem.Sentence(),
@@ -69,7 +69,16 @@ namespace Journey.Data
                         CityId = Faker.RandomNumber.Next(1, 5),
                         PlaceTypeId = Faker.RandomNumber.Next(1, 3),
                         AccountId = landLordUsers[Faker.RandomNumber.Next(0, landLordUsers.Length - 1)].Id
-                    });
+                    };
+                    if (place.PlaceTypeId == 3)
+                    {
+                        place.BedsCount = 1;
+                    }
+                    else
+                    {
+                        place.BedsCount = Faker.RandomNumber.Next(1, 5);
+                    }
+                    places.Add(place);
                 }
             }
         }

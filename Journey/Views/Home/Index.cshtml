@@ -1,5 +1,6 @@
 ﻿@using Journey.Entities
 @using Journey.ViewModels
+@using Journey.ViewModels.Home
 @using Microsoft.AspNetCore.Identity
 @model IndexViewModel<Place>
 @inject SignInManager<IdentityUser> SignInManager
@@ -77,13 +78,19 @@
     </form>
 </div>
 <div class="d-flex justify-content-start align-content-around">
+    @{
+        var res = Model.PaginatedList.PageIndex >= Model.PaginatedList.TotalPages
+        ? (Model.PaginatedList.TotalPages - 1) : Model.PaginatedList.PageIndex;
+    }
     <form asp-action="Index" method="get">
         <input type="hidden" name="sortOrder" value="@Model.Params["CurrentSort"]" />
-        <input type="hidden" name="pageNumber" value="@Model.PaginatedList.PageIndex" />
+        <input type="hidden" name="pageNumber" value="@res" />
         <input type="hidden" name="selectedCity" value="@Model.Params["SelectedCity"]" />
         <input type="hidden" name="selectedType" value="@Model.Params["SelectedType"]" />
         <input type="hidden" name="arrivalDate" value="@Model.Params["ArrivalDate"]" />
         <input type="hidden" name="departureDate" value="@Model.Params["DepartureDate"]" />
+        <input type="hidden" name="lowerPrice" value="@Model.Params["LowerPrice"]" />
+        <input type="hidden" name="upperPrice" value="@Model.Params["UpperPrice"]" />
         <div class="form-actions no-color">
             <p>
                 Find by name: <input type="text" name="SearchString" value="@Model.Params["CurrentFilter"]"
@@ -102,8 +109,12 @@
                        asp-action="Index"
                        asp-route-sortOrder="@Model.Params["PriceSortParm"]"
                        asp-route-currentFilter="@Model.Params["CurrentFilter"]"
-                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-pageNumber="@res"
                        asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+                       asp-route-upperPrice="@Model.Params["UpperPrice"]"
+                       asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+                       asp-route-departureDate="@Model.Params["DepartureDate"]"
                        asp-route-selectedType="@Model.Params["SelectedType"]">Price</a>
                 </li>
                 <li>
@@ -111,8 +122,12 @@
                        asp-action="Index"
                        asp-route-sortOrder="@Model.Params["RankSortParm"]"
                        asp-route-currentFilter="@Model.Params["CurrentFilter"]"
-                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-pageNumber="@res"
                        asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+                       asp-route-upperPrice="@Model.Params["UpperPrice"]"
+                       asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+                       asp-route-departureDate="@Model.Params["DepartureDate"]"
                        asp-route-selectedType="@Model.Params["SelectedType"]">Rank</a>
                 </li>
                 <li>
@@ -120,13 +135,52 @@
                        asp-action="Index"
                        asp-route-sortOrder="@Model.Params["NewestSortParm"]"
                        asp-route-currentFilter="@Model.Params["CurrentFilter"]"
-                       asp-route-pageNumber="@Model.PaginatedList.PageIndex"
+                       asp-route-pageNumber="@res"
                        asp-route-selectedCity="@Model.Params["SelectedCity"]"
+                       asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+                       asp-route-upperPrice="@Model.Params["UpperPrice"]"
+                       asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+                       asp-route-departureDate="@Model.Params["DepartureDate"]"
                        asp-route-selectedType="@Model.Params["SelectedType"]">Newest</a>
                 </li>
             </ul>
         </div>
     </div>
+
+</div>
+<div class="ms-3 w-25">
+    <h3 class="mb-3" style="font-size: 20px; font-weight: 700;">Price</h3>
+    <form class="row g-3 mb-3" asp-action="Index" asp-controller="Home" id="filterParameters" method="get">
+        <input type="hidden" name="sortOrder" value="@Model.Params["CurrentSort"]" />
+        <input type="hidden" name="searchString" value="@Model.Params["CurrentFilter"]" />
+        <input type="hidden" name="pageNumber" value="@res" />
+        <input type="hidden" name="selectedCity" value="@Model.Params["SelectedCity"]" />
+        <input type="hidden" name="selectedType" value="@Model.Params["SelectedType"]" />
+        <input type="hidden" name="arrivalDate" value="@Model.Params["ArrivalDate"]" />
+        <input type="hidden" name="departureDate" value="@Model.Params["DepartureDate"]" />
+        <div class="col">
+            <input type="number" min="0" max="100" value="@Model.Params["LowerPrice"]" class="form-control" id="inputLower" name="lowerPrice"
+                   placeholder="0">
+        </div>
+        <div class="col">
+            <input type="number" min="0" max="100" value="@Model.Params["UpperPrice"]" class="form-control" id="inputUpper" name="upperPrice"
+                   placeholder="0">
+        </div>
+        <span class="multi-range">
+            <input type="range" min="0" max="100" value="@Model.Params["LowerPrice"]" id="lower">
+            <input type="range" min="0" max="100" value="@Model.Params["UpperPrice"]" id="upper">
+        </span>
+        <div class="col">
+            Beds
+        </div>
+        <div class="col text-end">
+            <input type="button" id="buttonCountMinusBeds" class="me-3" style="background-color:transparent; border: none;" value="-" />
+            <span id="calculationBeds" class="me-3">@Model.Params["BedsCount"]</span>
+            <input type="button" id="buttonCountPlusBeds" style="background-color:transparent; border: none;" value="+">
+            <input type="hidden" value="@Model.Params["BedsCount"]" name="bedsCount" id="bCount" />
+        </div>
+    </form>
+
 </div>
 <h2>Places</h2>
 <table class="table">
@@ -154,6 +208,9 @@
                 Type
             </th>
             <th>
+                BedsCount
+            </th>
+            <th>
                 CreatedAt
             </th>
             @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
@@ -173,6 +230,7 @@
                 <td>@item.City!.CityName</td>
                 <td>@item.Address</td>
                 <td>@item.PlaceType!.TypeName</td>
+                <td>@item.BedsCount</td>
                 <td>@item.CreatedAt</td>
                 @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
                 {
@@ -200,6 +258,10 @@
                asp-route-currentFilter="@Model.Params["CurrentFilter"]"
                asp-route-selectedCity="@Model.Params["SelectedCity"]"
                asp-route-selectedType="@Model.Params["SelectedType"]"
+               asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+               asp-route-upperPrice="@Model.Params["UpperPrice"]"
+               asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+               asp-route-departureDate="@Model.Params["DepartureDate"]"
                class="btn btn-default @prevDisabled">
                 Previous
             </a>
@@ -213,6 +275,10 @@
                asp-route-currentFilter="@Model.Params["CurrentFilter"]"
                asp-route-selectedCity="@Model.Params["SelectedCity"]"
                asp-route-selectedType="@Model.Params["SelectedType"]"
+               asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+               asp-route-upperPrice="@Model.Params["UpperPrice"]"
+               asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+               asp-route-departureDate="@Model.Params["DepartureDate"]"
                class="page-link">@i</a>
             </li>
         }
@@ -223,6 +289,10 @@
                asp-route-currentFilter="@Model.Params["CurrentFilter"]"
                asp-route-selectedCity="@Model.Params["SelectedCity"]"
                asp-route-selectedType="@Model.Params["SelectedType"]"
+               asp-route-lowerPrice="@Model.Params["LowerPrice"]"
+               asp-route-upperPrice="@Model.Params["UpperPrice"]"
+               asp-route-arrivalDate="@Model.Params["ArrivalDate"]"
+               asp-route-departureDate="@Model.Params["DepartureDate"]"
                class="btn btn-default @nextDisabled">
                 Next
             </a>
@@ -232,6 +302,97 @@
 @section Scripts{
     <script>
 
+        let lowerSlider = document.getElementById("lower");
+        let inputLower = document.getElementById("inputLower");
+        let upperSlider = document.getElementById("upper");
+        let inputUpper = document.getElementById("inputUpper");
+        let bCount = document.getElementById("bCount");
+
+        upperSlider.onchange = function() {
+            inputUpper.value = upperSlider.value;
+            inputLower.value = lowerSlider.value;
+        }
+        lowerSlider.onchange = function() {
+            inputLower.value = lowerSlider.value;
+            inputUpper.value = upperSlider.value;
+        }
+
+        lowerVal = parseInt(lowerSlider.value);
+        upperVal = parseInt(upperSlider.value);
+
+        upperSlider.oninput = function() {
+            lowerVal = parseInt(lowerSlider.value);
+            upperVal = parseInt(upperSlider.value);
+
+            if (upperVal < lowerVal + 4) {
+                lowerSlider.value = upperVal - 4;
+
+                if (lowerVal == lowerSlider.min) {
+                    upperSlider.value = 4;
+                }
+            }
+        };
+        lowerSlider.oninput = function() {
+            lowerVal = parseInt(lowerSlider.value);
+            upperVal = parseInt(upperSlider.value);
+
+            if (lowerVal > upperVal - 4) {
+                upperSlider.value = lowerVal + 4;
+
+                if (upperVal == upperSlider.max) {
+                    lowerSlider.value = parseInt(upperSlider.max) - 4;
+                }
+
+            }
+        };
+        lowerSlider.oninput = function() {
+            inputLower.value = lowerSlider.value;
+            if (Number(lowerSlider.value) >= Number(upperSlider.value)) {
+                upperSlider.value = lowerSlider.value;
+                inputUpper.value = lowerSlider.value;
+            }
+            
+        }
+        upperSlider.oninput = function() {
+            inputUpper.value = upperSlider.value;
+            if (Number(lowerSlider.value) >= Number(upperSlider.value)) {
+                lowerSlider.value = upperSlider.value;
+                inputLower.value = upperSlider.value;
+            }
+            
+        }
+
+        inputLower.onchange = function() {
+            lowerSlider.value = inputLower.value;
+            if (Number(inputLower.value) >= Number(inputUpper.value)) {
+                inputUpper.value = inputLower.value;
+                upperSlider.value = inputLower.value;
+            }
+            
+        }
+        inputUpper.onchange = function() {
+            upperSlider.value = inputUpper.value;
+            if (Number(inputLower.value) >= Number(inputUpper.value)) {
+                inputLower.value = inputUpper.value;
+                lowerSlider.value = inputUpper.value;
+            }
+            
+        }
+
+        upperSlider.onchange = function() {
+            document.forms["filterParameters"].submit();
+        };
+        inputUpper.onchange = function() {
+            document.forms["filterParameters"].submit();
+        }
+        lowerSlider.onchange = function() {
+            document.forms["filterParameters"].submit();
+        };
+        inputLower.onchange = function() {
+            document.forms["filterParameters"].submit();
+        }
+       
+        /////////////////////////////////////////////////////////////////////
         function toFormat(date) {
             var year = date.getFullYear();
             var month = date.getMonth() + 1;
@@ -255,5 +416,27 @@
             document.getElementById("DepartureDate").min = toFormat(currentDate)
             document.getElementById("DepartureDate").value = toFormat(currentDate)
         }
+        //////////////////////////////////////////////////////////
+        let calculateBeds = document.getElementById("calculationBeds");
+        let bedsCount = document.getElementById("bCount");
+
+        document.getElementById("buttonCountPlusBeds").onclick = function() {
+            let countPlus = calculateBeds.innerHTML;
+            if (+countPlus <= 10) {
+                calculateBeds.innerHTML++;
+            }
+            bedsCount.value = calculateBeds.innerHTML;
+            document.forms["filterParameters"].submit();
+        }
+
+        document.getElementById("buttonCountMinusBeds").onclick = function() {
+            let countMinus = calculateBeds.innerHTML;
+            if (+countMinus >= 1) {
+                calculateBeds.innerHTML--;
+            }
+            bedsCount.value = calculateBeds.innerHTML;
+            document.forms["filterParameters"].submit();
+        }
+
     </script>
 }

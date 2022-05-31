@@ -1,4 +1,4 @@
-﻿namespace Journey.ViewModels
+﻿namespace Journey.ViewModels.Home
 {
     public class IndexViewModel<T>
     {

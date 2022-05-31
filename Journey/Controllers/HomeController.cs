@@ -1,7 +1,5 @@
 ﻿using Journey.Data;
-using Journey.Entities;
 using Journey.ViewModels.Home;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journey.Controllers
@@ -18,19 +16,23 @@ namespace Journey.Controllers
         }
         public IActionResult Index(
             DateTime? arrivalDate, DateTime? departureDate,
+            int? lowerPrice, int? upperPrice,
             string sortOrder,
             string currentFilter,
             string searchString,
             int selectedCity,
             int selectedType,
-            int? pageNumber)
+            int bedsCount,
+            int? pageNumber
+            )
         {
 
             var model = modelCreator.CreateIndexView(
                 arrivalDate, departureDate,
-                sortOrder, currentFilter, searchString, selectedCity, selectedType, pageNumber
+                lowerPrice, upperPrice,
+                sortOrder, currentFilter, searchString, selectedCity, selectedType, bedsCount,
+                pageNumber
                 );
-
             return View(model);
         }
         public IActionResult Details(int? id)

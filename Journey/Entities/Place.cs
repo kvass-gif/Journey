@@ -30,6 +30,8 @@ namespace Journey.Entities
         public City? City { get; set; }
         public int PlaceTypeId { get; set; }
         public PlaceType? PlaceType { get; set; }
+        [Required]
+        public int BedsCount { get; set; }
         public string? AccountId { get; set; }
         [NotMapped]
         public IdentityUser? Account { get; set; }

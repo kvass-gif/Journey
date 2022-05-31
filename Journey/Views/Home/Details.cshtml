@@ -29,6 +29,14 @@
                 @Model.PricePerNight
             </dd>
         </dl>
+         <dl class="row">
+            <dt class="col-sm-2">
+                <label asp-for="BedsCount"></label>
+            </dt>
+            <dd class="col-sm-10">
+                @Model.BedsCount
+            </dd>
+        </dl>
         <dl class="row">
             <dt class="col-sm-2">
                 <label asp-for="Rank"></label>
@@ -43,6 +51,14 @@
             </dt>
             <dd class="col-sm-10">
                 @Model.City!.CityName
+            </dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">
+                <label asp-for="PlaceType"></label>
+            </dt>
+            <dd class="col-sm-10">
+                @Model.PlaceType!.TypeName
             </dd>
         </dl>
         <dl class="row">

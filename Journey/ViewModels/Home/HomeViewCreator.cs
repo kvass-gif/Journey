@@ -29,10 +29,16 @@ namespace Journey.ViewModels.Home
             }
             return citySelectedList;
         }
-        private IEnumerable<Place> serchSortAction(string searchString, string sortOrder,
-            DateTime arrivalDate, DateTime departureDate, int selectCity, int selectType)
+        private IEnumerable<Place> serchSortAction(
+            string searchString, string sortOrder,
+            DateTime arrivalDate, DateTime departureDate,
+            int lowerPrice, int upperPrice,
+            int selectCity, int selectType, int bedsCount)
         {
-            var objects = unitOfWork.PlaceRepo.Places(arrivalDate, departureDate, selectCity, selectType);
+            var objects = unitOfWork.PlaceRepo.Places(
+                arrivalDate, departureDate,
+                lowerPrice, upperPrice,
+                selectCity, selectType, bedsCount);
             if (!string.IsNullOrEmpty(searchString))
             {
                 objects = objects.Where(s => s.PlaceName.Contains(searchString));
@@ -47,12 +53,15 @@ namespace Journey.ViewModels.Home
         }
         public IndexViewModel<Place> CreateIndexView(
             DateTime? arrivalDate, DateTime? departureDate,
+            int? lowerPrice, int? upperPrice,
             string sortOrder,
             string currentFilter,
             string searchString,
             int selectCity,
             int selectType,
-            int? pageNumber)
+            int bedsCount,
+            int? pageNumber
+           )
         {
             DateTime arrivalDateLocal;
             DateTime departureDateLocal;
@@ -66,12 +75,27 @@ namespace Journey.ViewModels.Home
                 arrivalDateLocal = (DateTime)arrivalDate;
                 departureDateLocal = (DateTime)departureDate;
             }
+            int lowerPriceLocal;
+            int upperPriceLocal;
+            if (lowerPrice == null || upperPrice == null)
+            {
+                lowerPriceLocal = 0;
+                upperPriceLocal = 100;
+            }
+            else
+            {
+                lowerPriceLocal = (int)lowerPrice;
+                upperPriceLocal = (int)upperPrice;
+            }
 
             var indexView = new IndexViewModel<Place>();
             indexView.Params.Add("ArrivalDate", arrivalDateLocal.ToString("yyyy-MM-dd"));
             indexView.Params.Add("DepartureDate", departureDateLocal.ToString("yyyy-MM-dd"));
+            indexView.Params.Add("LowerPrice", lowerPriceLocal.ToString());
+            indexView.Params.Add("UpperPrice", upperPriceLocal.ToString());
             indexView.Params.Add("SelectedCity", selectCity.ToString());
             indexView.Params.Add("SelectedType", selectType.ToString());
+            indexView.Params.Add("BedsCount", bedsCount.ToString());
             indexView.Cities = citiesList();
             indexView.Types = typeList();
 
@@ -89,7 +113,11 @@ namespace Journey.ViewModels.Home
             }
             indexView.Params.Add("CurrentFilter", searchString);
 
-            var objects = serchSortAction(searchString, sortOrder, arrivalDateLocal, departureDateLocal , selectCity, selectType);
+            var objects = serchSortAction(
+                searchString, sortOrder,
+                arrivalDateLocal, departureDateLocal,
+                lowerPriceLocal, upperPriceLocal,
+                selectCity, selectType, bedsCount);
             int pageSize = 20;
             indexView.PaginatedList = PaginatedList<Place>.Create(objects, pageNumber ?? 1, pageSize);
             return indexView;
