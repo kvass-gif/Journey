@@ -1,4 +1,5 @@
 ﻿using Journey.Entities;
+using Journey.ViewModels.Home;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,37 +22,22 @@ namespace Journey.Data.Repositories
                           select a);
             return places;
         }
-        public IEnumerable<Place> Places(
-            DateTime arrivalDate, DateTime departureDate,
-             int lowerPrice, int upperPrice,
-            int cityId, int typeId, int bedsCount)
+        private void joinWithAccounts(List<Place> places)
         {
-            Place[] places;
-            var query = (from a in _places
-                         where lowerPrice <= a.PricePerNight && upperPrice >= a.PricePerNight
-                         select a);
-            if (cityId != 0)
+            for (int i = 0; i < places.Count; i++)
             {
-                query = (from a in query
-                         where a.CityId == cityId
-                         select a);
+                var id = places.ElementAt(i).AccountId;
+                places.ElementAt(i).Account = _identityUsers.SingleOrDefault(a => a.Id == id);
             }
-            if(bedsCount != 0)
+        }
+        private List<Place> filterPlaces(IQueryable<Place> places, DateTime? arrivalDate, DateTime? departureDate)
+        {
+            if (arrivalDate == null || departureDate == null)
             {
-                query = (from a in query
-                         where a.BedsCount == bedsCount
-                         select a);
+                return places.ToList();
             }
-            if (typeId != 0)
-            {
-                query = (from a in query
-                         where a.PlaceTypeId == typeId
-                         select a);
-            }
-
-            query = query.Include(a => a.City).Include(a => a.Reservations);
             List<Place> result = new List<Place>();
-            foreach (var place in query)
+            foreach (var place in places)
             {
                 if (place.Reservations != null)
                 {
@@ -61,8 +47,8 @@ namespace Journey.Data.Repositories
                         if (!(reservation.Status == Status.Canceled
                             || reservation.Status == Status.Completed))
                         {
-                            resBool = reservation.DepartureDate < arrivalDate
-                                || departureDate < reservation.ArrivalDate;
+                            resBool = reservation.DepartureDate < arrivalDate.Value
+                                || departureDate.Value < reservation.ArrivalDate;
                         }
                         if (resBool == false)
                         {
@@ -75,22 +61,29 @@ namespace Journey.Data.Repositories
                     }
                 }
             }
-            for (int i = 0; i < result.Count; i++)
-            {
-                var id = result.ElementAt(i).AccountId;
-                result.ElementAt(i).Account = _identityUsers.SingleOrDefault(a => a.Id == id);
-            }
-
             return result;
         }
-        public IQueryable<Place> Places()
+        public IEnumerable<Place> Places(HomeViewModel indexView)
         {
-            var places = (from a in _places
-                          orderby a.Rank
-                          select a);
-            return places;
+            var places = _places.AsQueryable();
+            places = places.Where(a => indexView.LowerPrice <= a.PricePerNight && indexView.UpperPrice >= a.PricePerNight);
+            if (indexView.SelectedCityId != 0)
+            {
+                places = places.Where(a => a.CityId == indexView.SelectedCityId);
+            }
+            if (indexView.SelectedTypeId != 0)
+            {
+                places = places.Where(a => a.PlaceTypeId == indexView.SelectedTypeId);
+            }
+            if (indexView.BedsCount != 0)
+            {
+                places = places.Where(a => a.BedsCount == indexView.BedsCount);
+            }
+            places = places.Include(a => a.City).Include(a => a.Reservations);
+            List<Place> result = filterPlaces(places, indexView.ArrivalDate, indexView.DepartureDate);
+            joinWithAccounts(result);
+            return result;
         }
-
         public Place? Find(int id)
         {
             var place = (from c in _places

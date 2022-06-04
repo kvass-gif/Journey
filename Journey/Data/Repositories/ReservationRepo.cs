@@ -8,7 +8,6 @@ namespace Journey.Data.Repositories
     {
         private readonly DbSet<Reservation> _reservations;
         private readonly DbSet<IdentityUser> _identityUsers;
-
         public ReservationRepo(ApplicationDbContext appDbContext, AccountDbContext accountDbContext)
         {
             _reservations = appDbContext.Reservations;
@@ -20,7 +19,7 @@ namespace Journey.Data.Repositories
                                 where a.AccountId == accountId
                                 orderby a.Status
                                 select a).Include(a => a.Place);
-            
+
             return reservations;
         }
         public IEnumerable<Reservation> ReservationsByPlaceId(int placeId)
@@ -44,11 +43,11 @@ namespace Journey.Data.Repositories
             }
             return reservations2;
         }
+       
         public Reservation? FindOne(int id)
         {
             return _reservations.SingleOrDefault(a => a.Id == id);
         }
-
         public void Add(Reservation obj)
         {
             _reservations.Add(obj);

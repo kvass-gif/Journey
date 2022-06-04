@@ -17,5 +17,14 @@ namespace Journey.Data.Repositories
                           select a);
             return objs;
         }
+        public Dictionary<int, string> ToDictionary()
+        {
+            var typesDictionary = new Dictionary<int, string>();
+            foreach (var item in Types())
+            {
+                typesDictionary.Add(item.Id, item.TypeName);
+            }
+            return typesDictionary;
+        }
     }
 }

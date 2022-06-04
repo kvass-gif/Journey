@@ -17,5 +17,14 @@ namespace Journey.Data.Repositories
                           select a);
             return cities;
         }
+        public Dictionary<int, string> ToDictionary()
+        {
+            var citiesDictionary = new Dictionary<int, string>();
+            foreach (var item in Cities())
+            {
+                citiesDictionary.Add(item.Id, item.CityName);
+            }
+            return citiesDictionary;
+        }
     }
 }

@@ -7,33 +7,17 @@ namespace Journey.Controllers
     public class HomeController : Controller
     {
         private readonly UnitOfWork unitOfWork;
-        private readonly HomeViewCreator modelCreator;
+        private readonly HomeViewHandler modelHandler;
 
         public HomeController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            modelCreator = new HomeViewCreator(unitOfWork);
+            modelHandler = new HomeViewHandler(unitOfWork);
         }
-        public IActionResult Index(
-            DateTime? arrivalDate, DateTime? departureDate,
-            int? lowerPrice, int? upperPrice,
-            string sortOrder,
-            string currentFilter,
-            string searchString,
-            int selectedCity,
-            int selectedType,
-            int bedsCount,
-            int? pageNumber
-            )
+        public IActionResult Index(HomeViewModel homeViewModel)
         {
-
-            var model = modelCreator.CreateIndexView(
-                arrivalDate, departureDate,
-                lowerPrice, upperPrice,
-                sortOrder, currentFilter, searchString, selectedCity, selectedType, bedsCount,
-                pageNumber
-                );
-            return View(model);
+            modelHandler.HandleIndexView(homeViewModel);
+            return View(homeViewModel);
         }
         public IActionResult Details(int? id)
         {
@@ -48,7 +32,5 @@ namespace Journey.Controllers
             }
             return View(obj);
         }
-
-
     }
 }
