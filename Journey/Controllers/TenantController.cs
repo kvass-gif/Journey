@@ -26,24 +26,22 @@ namespace Journey.Controllers
             }
             return View(arr);
         }
-        public IActionResult MakeReservation(int placeId)
-        {
-            var reservation = new Reservation();
-            reservation.ArrivalDate = DateTime.Now.AddDays(1);
-            reservation.DepartureDate = DateTime.Now.AddDays(2);
-            reservation.MaxDurationDays = 30;
-            reservation.PlaceId = placeId;
-            
-            return View(reservation);
-        }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult MakeReservation(Reservation reservation)
+        public IActionResult MakeReservation(Place place)
         {
+            if (place.ArrivalDate == null || place.DepartureDate == null)
+            {
+                return Content("place.ArrivalDate == null || place.DepartureDate == null");
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var reservation = new Reservation();
+                    reservation.ArrivalDate = place.ArrivalDate.Value;
+                    reservation.DepartureDate = place.DepartureDate.Value;
+                    reservation.PlaceId = place.Id;
                     reservation.AccountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     unitOfWork.ReservationRepo.Add(reservation);
                     unitOfWork.SaveApp();
@@ -57,13 +55,13 @@ namespace Journey.Controllers
                        "see your system administrator.");
                 }
             }
-            return View(reservation);
+            return RedirectToAction("Details", "Home", place);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult CancelReservation(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }

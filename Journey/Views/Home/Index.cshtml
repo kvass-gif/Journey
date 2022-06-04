@@ -198,14 +198,19 @@
             <th>
                 CreatedAt
             </th>
-            
+
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.PaginatedList)
         {
             <tr>
-                <td><a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">@item.PlaceName</a></td>
+                <td>
+                    <a asp-controller="Home" asp-action="Details"
+                   asp-route-id="@item.Id"
+                   asp-route-arrivalDate="@arrivalStr"
+                   asp-route-departureDate="@departureStr">@item.PlaceName</a>
+                </td>
                 <td>item.Account!.UserName</td>
                 <td>@item.PricePerNight</td>
                 <td>@item.Rank</td>

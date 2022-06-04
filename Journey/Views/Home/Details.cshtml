@@ -1,7 +1,9 @@
-﻿@using Journey.Entities
+﻿@using Journey.Data
+@using Journey.Entities
 @using Microsoft.AspNetCore.Identity
 @model Place
 @inject SignInManager<IdentityUser> SignInManager
+@inject UnitOfWork unitOfwork
 @{
     ViewData["Title"] = "Details";
 }
@@ -29,7 +31,7 @@
                 @Model.PricePerNight
             </dd>
         </dl>
-         <dl class="row">
+        <dl class="row">
             <dt class="col-sm-2">
                 <label asp-for="BedsCount"></label>
             </dt>
@@ -81,13 +83,57 @@
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary" style="width:150px">
         Back to List
     </a>
-    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant"))
+    @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant")
+    && Model.ArrivalDate != null && Model.DepartureDate != null)
     {
-
-        <a class="btn btn-dark" asp-controller="Tenant" asp-action="MakeReservation"
-       asp-route-placeId="@Model.Id">
-            Make Reservation
-        </a>
-
+        <form method="post" asp-action="MakeReservation" asp-controller="Tenant">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="Address" />
+            <input type="hidden" asp-for="PlaceName" />
+            <input type="hidden" asp-for="Description" />
+            <div class="border p-3 mt-4">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="mb-3">
+                    <label asp-for="ArrivalDate"></label>
+                    <input asp-for="ArrivalDate" type="date"
+                       min="@Model.ArrivalDate.Value.ToString("yyyy-MM-dd")"
+                       max="@Model.DepartureDate.Value.AddDays(-1).ToString("yyyy-MM-dd")"
+                       value="@Model.ArrivalDate.Value.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+                    <span asp-validation-for="ArrivalDate" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="DepartureDate"></label>
+                    <input asp-for="DepartureDate" type="date"
+                       min="@Model.ArrivalDate.Value.AddDays(1).ToString("yyyy-MM-dd")"
+                       max="@Model.DepartureDate.Value.ToString("yyyy-MM-dd")"
+                       value="@Model.DepartureDate.Value.ToString("yyyy-MM-dd")"
+                       class="form-control" />
+                    <span asp-validation-for="DepartureDate" class="text-danger"></span>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width:150px">
+                    Make a reservation
+                </button>
+            </div>
+        </form>
     }
 </div>
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        let date = new Date();
+        function toFormat(date) {
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            month = month / 10 >= 1 ? month.toString() : `0${month}`;
+            day = date.getDate() / 10 >= 1 ? date.getDate().toString() : `0${date.getDate()}`;
+            return `${year}-${month}-${day}`;
+        }
+        document.getElementById("ArrivalDate").onchange = function() {
+            let currentDate = new Date(document.getElementById("ArrivalDate").value)
+            currentDate.setDate(currentDate.getDate() + 1);
+            document.getElementById("DepartureDate").min = toFormat(currentDate)
+        }
+    </script>
+}

@@ -1,4 +1,5 @@
 ﻿using Journey.Data;
+using Journey.Entities;
 using Journey.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace Journey.Controllers
             modelHandler.HandleIndexView(homeViewModel);
             return View(homeViewModel);
         }
-        public IActionResult Details(int? id)
+        public IActionResult Details(int? id, DateTime? arrivalDate, DateTime? departureDate)
         {
             if (id == null)
             {
@@ -30,6 +31,8 @@ namespace Journey.Controllers
             {
                 return NotFound();
             }
+            obj.ArrivalDate = arrivalDate;
+            obj.DepartureDate = departureDate;
             return View(obj);
         }
     }

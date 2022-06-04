@@ -39,5 +39,10 @@ namespace Journey.Entities
         public Dictionary<int, string>? Cities { get; set; }
         [NotMapped]
         public Dictionary<int, string>? PlaceTypes { get; set; }
+
+        [NotMapped]
+        public DateTime? ArrivalDate { get; set; }
+        [NotMapped]
+        public DateTime? DepartureDate { get; set; }
     }
 }

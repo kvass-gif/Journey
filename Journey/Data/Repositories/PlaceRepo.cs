@@ -30,6 +30,27 @@ namespace Journey.Data.Repositories
                 places.ElementAt(i).Account = _identityUsers.SingleOrDefault(a => a.Id == id);
             }
         }
+        public bool IsFreeForReservation(ICollection<Reservation>? reservations, DateTime arrivalDate, DateTime departureDate)
+        {
+            bool resBool = true;
+            if (reservations != null)
+            {
+                foreach (var reservation in reservations)
+                {
+                    if (!(reservation.Status == Status.Canceled
+                        || reservation.Status == Status.Completed))
+                    {
+                        resBool = reservation.DepartureDate < arrivalDate
+                            || departureDate < reservation.ArrivalDate;
+                    }
+                    if (resBool == false)
+                    {
+                        break;
+                    }
+                }
+            }
+            return resBool;
+        }
         private List<Place> filterPlaces(IQueryable<Place> places, DateTime? arrivalDate, DateTime? departureDate)
         {
             if (arrivalDate == null || departureDate == null)
@@ -39,26 +60,9 @@ namespace Journey.Data.Repositories
             List<Place> result = new List<Place>();
             foreach (var place in places)
             {
-                if (place.Reservations != null)
+                if (IsFreeForReservation(place.Reservations, arrivalDate.Value, departureDate.Value))
                 {
-                    bool resBool = true;
-                    foreach (var reservation in place.Reservations)
-                    {
-                        if (!(reservation.Status == Status.Canceled
-                            || reservation.Status == Status.Completed))
-                        {
-                            resBool = reservation.DepartureDate < arrivalDate.Value
-                                || departureDate.Value < reservation.ArrivalDate;
-                        }
-                        if (resBool == false)
-                        {
-                            break;
-                        }
-                    }
-                    if (resBool)
-                    {
-                        result.Add(place);
-                    }
+                    result.Add(place);
                 }
             }
             return result;
