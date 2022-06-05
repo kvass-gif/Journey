@@ -80,9 +80,6 @@
             </dd>
         </dl>
     </div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary" style="width:150px">
-        Back to List
-    </a>
     @if (SignInManager.IsSignedIn(User) && User.IsInRole("Tenant")
     && Model.ArrivalDate != null && Model.DepartureDate != null)
     {

@@ -68,7 +68,11 @@ namespace Journey.Data
                         Address = Faker.Address.StreetAddress(),
                         CityId = Faker.RandomNumber.Next(1, 5),
                         PlaceTypeId = Faker.RandomNumber.Next(1, 3),
-                        AccountId = landLordUsers[Faker.RandomNumber.Next(0, landLordUsers.Length - 1)].Id
+                        AccountId = landLordUsers[Faker.RandomNumber.Next(0, landLordUsers.Length - 1)].Id,
+                        CreatedAt = DateTime.Now.Date
+                        .AddMonths(-1 * Faker.RandomNumber.Next(0, 12))
+                        .AddDays(-1 * Faker.RandomNumber.Next(0, 30))
+                        .AddYears(-1 * Faker.RandomNumber.Next(0, 1))
                     };
                     if (place.PlaceTypeId == 3)
                     {

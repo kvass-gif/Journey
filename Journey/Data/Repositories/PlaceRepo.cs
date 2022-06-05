@@ -16,11 +16,8 @@ namespace Journey.Data.Repositories
         }
         public IQueryable<Place> Places(string accountId)
         {
-            var places = (from a in _places
-                          where a.AccountId == accountId
-                          orderby a.PlaceName
-                          select a);
-            return places;
+            return _places.Where(a => a.AccountId == accountId)
+                .Include(a => a.PlaceType).Include(a => a.City);
         }
         private void joinWithAccounts(List<Place> places)
         {
@@ -96,9 +93,17 @@ namespace Journey.Data.Repositories
                          .Include(a => a.City).SingleOrDefault();
             return place;
         }
+        public void Update(Place other)
+        {
+            _places.Update(other);
+        }
         public void Add(Place obj)
         {
             _places.Add(obj);
+        }
+        public void Remove(Place obj)
+        {
+            _places.Remove(obj);
         }
     }
 }

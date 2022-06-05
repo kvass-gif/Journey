@@ -6,7 +6,6 @@ namespace Journey.ViewModels.Home
     public class HomeViewHandler
     {
         private readonly UnitOfWork unitOfWork;
-        public Place Place { get; set; }
         public HomeViewHandler(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;

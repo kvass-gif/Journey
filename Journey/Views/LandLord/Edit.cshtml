@@ -1,10 +1,14 @@
 ﻿@using Journey.Entities
+@using Microsoft.AspNetCore.Identity
 @model Place
 @{
     ViewData["Title"] = "Register object";
 }
 <h1>LandLord page</h1>
 <form method="post">
+    <input asp-for="Id" hidden value="@Model.Id" />
+    <input asp-for="CreatedAt" type="date" hidden value="@Model.CreatedAt.ToString("yyyy-MM-dd")" />
+    <input asp-for="AccountId" hidden value="@Model.AccountId" />
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
@@ -48,7 +52,14 @@
                     style="font-size:15px; border: none; padding-top: 0;">
                 @foreach (var item in Model.Cities!)
                 {
-                    <option value="@item.Key" selected>@item.Value</option>
+                    @if (Model.CityId != item.Key)
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Key" selected>@item.Value</option>
+                    }
                 }
             </select>
         </div>
@@ -57,11 +68,18 @@
                     style="font-size:15px; border: none; padding-top: 0;">
                 @foreach (var item in Model.PlaceTypes!)
                 {
-                    <option value="@item.Key" selected>@item.Value</option>
+                    @if (Model.PlaceTypeId != item.Key)
+                    {
+                        <option value="@item.Key">@item.Value</option>
+                    }
+                    else
+                    {
+                        <option value="@item.Key" selected>@item.Value</option>
+                    }
                 }
             </select>
             <button type="submit" class="btn btn-primary" style="width:150px">
-                Create
+                Update
             </button>
             <a asp-controller="LandLord" asp-action="Index" class="btn btn-secondary" style="width:150px">
                 Back to List

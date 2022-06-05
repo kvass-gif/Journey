@@ -24,17 +24,14 @@ namespace Journey.Entities
         public Place? Place { get; set; }
         public string? AccountId { get; set; }
 
-        
         [NotMapped]
         public int MaxDurationDays { get; set; }
-
         [NotMapped]
         public IdentityUser? Account { get; set; }
-
         [NotMapped]
         public int? Sum { get; set; }
         [NotMapped]
-        public Dictionary<int, string>? StatusDictionary { get; set; } 
+        public Dictionary<int, string> StatusDictionary { get; set; } 
 
 
     }

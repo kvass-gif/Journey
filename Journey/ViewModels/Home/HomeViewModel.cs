@@ -12,11 +12,11 @@ namespace Journey.ViewModels.Home
         public int SelectedTypeId { get; set; }
         public string? SearchString { get; set; }
         public string? CurrentSearchString { get; set; }
-        public string CurrentSort { get; set; }
         public int LowerPrice { get; set; } = 0;
         public int UpperPrice { get; set; } = 100;
         public int BedsCount { get; set; } = 0;
         public int? PageIndex { get; set; }
+        public string CurrentSort { get; set; }
         public string RankSortParam { get; set; } = "";
         public string PriceSortParam { get; set; } = "Price_desc";
         public string NewestSortParam { get; set; } = "Newest_desc";

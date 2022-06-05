@@ -1,28 +1,128 @@
 ﻿@using Journey.Entities
-@model ICollection<Place>
+@using Journey.ViewModels.LandLord
+@model PlacesViewModel
 @{
     ViewData["Title"] = "LandLord page";
+    var res = Model.PaginatedList.PageIndex >= Model.PaginatedList.TotalPages
+               ? (Model.PaginatedList.TotalPages - 1) : Model.PaginatedList.PageIndex;
+    var prevDisabled = !Model.PaginatedList.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.PaginatedList.HasNextPage ? "disabled" : "";
 }
 <h1>LandLord page</h1>
 <h2>Places</h2>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <input type="hidden" value="@res" name="pageIndex" />
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@Model.SearchString"
+                                 class="form-control" style="width:300px; display:inline-block;" />
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
-            <th>PlaceName</th>
-            <td>PricePerNight</td>
-            <td>Rank</td>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.NameSortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">PlaceName</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.PriceSortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">PricePerNight</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.RankSortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">Rank</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.CitySortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">City</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.TypeSortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">Type</a>
+            </th>
+            <th>
+                <a asp-action="Index"
+                   asp-route-currentSort="@Model.CreatedAtSortParam"
+                   asp-route-currentSearchString="@Model.SearchString"
+                   asp-route-pageIndex="@Model.PageIndex">CreatedAt</a>
+            </th>
+
             <td></td>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var item in Model.PaginatedList)
         {
             <tr>
                 <td>@item.PlaceName</td>
                 <td>@item.PricePerNight</td>
                 <td>@item.Rank</td>
-                <td><a asp-controller="LandLord" asp-action="Reservations" asp-route-id="@item.Id">Reservations</a></td>
+                <td>@item.City!.CityName</td>
+                <td>@item.PlaceType!.TypeName</td>
+                <td>@item.CreatedAt</td>
+                <td>
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            Actrions
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <li>
+                                <a class="dropdown-item" asp-controller="LandLord" asp-action="Reservations" asp-route-id="@item.Id">Reservations</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="LandLord" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                            </li>
+                        </ul>
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
 </table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a asp-action="Index"
+               asp-route-currentSearchString="@Model.SearchString"
+               asp-route-currentSort="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.PaginatedList.PageIndex - 1)"
+               class="btn btn-default @prevDisabled">
+                Previous
+            </a>
+        </li>
+        @for (int i = 1; i <= Model.PaginatedList.TotalPages; i++)
+        {
+            <li class="page-item">
+                <a asp-action="Index"
+               asp-route-currentSearchString="@Model.SearchString"
+               asp-route-currentSort="@Model.CurrentSort"
+               asp-route-pageIndex="@i"
+               class="page-link">@i</a>
+            </li>
+        }
+        <li class="page-item">
+            <a asp-action="Index"
+               asp-route-currentSearchString="@Model.SearchString"
+               asp-route-currentSort="@Model.CurrentSort"
+               asp-route-pageIndex="@(Model.PaginatedList.PageIndex + 1)"
+               class="btn btn-default @nextDisabled">
+                Next
+            </a>
+        </li>
+    </ul>
+</nav>

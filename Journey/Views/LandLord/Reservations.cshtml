@@ -1,7 +1,7 @@
 ﻿@using Journey.Entities
 @model ICollection<Reservation>
 @{
-    ViewData["Title"] = "Tenant Page";
+    ViewData["Title"] = "Reservations";
 }
 <h2>Reservatios</h2>
 <table class="table">
@@ -40,7 +40,7 @@
                     </td>
                 }
                 <td>
-                    @if (item.StatusDictionary!.Count == 1 || item.Status == Status.Canceled || item.Status == Status.Completed)
+                    @if (item.StatusDictionary.Count == 1 || item.Status == Status.Canceled || item.Status == Status.Completed)
                     {
                         @item.Status.ToString()
                     }
@@ -48,7 +48,7 @@
                     {
                         <form class="form-inline" asp-controller="LandLord" asp-action="ChangeStatus" asp-route-id="@item.Id">
                             <select onchange="this.form.submit()" name="select" id="select">
-                                @foreach (var c in item.StatusDictionary!)
+                                @foreach (var c in item.StatusDictionary)
                                 {
                                     @if (item.Status.ToString() == c.Value.ToString())
                                     {

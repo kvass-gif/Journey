@@ -19,14 +19,13 @@ namespace Journey.Data.Repositories
                                 where a.AccountId == accountId
                                 orderby a.Status
                                 select a).Include(a => a.Place);
-
             return reservations;
         }
         public IEnumerable<Reservation> ReservationsByPlaceId(int placeId)
         {
-            var arr = (from a in _reservations
-                       where placeId == a.PlaceId
-                       select a).Include(a => a.Place).ToArray();
+            var arr = _reservations
+                .Where(a => a.PlaceId == placeId)
+                .Include(a => a.Place).ToArray();
             var reservations = from r in arr
                                join i in _identityUsers on r.AccountId equals i.Id
                                orderby r.DepartureDate
@@ -43,7 +42,6 @@ namespace Journey.Data.Repositories
             }
             return reservations2;
         }
-       
         public Reservation? FindOne(int id)
         {
             return _reservations.SingleOrDefault(a => a.Id == id);
