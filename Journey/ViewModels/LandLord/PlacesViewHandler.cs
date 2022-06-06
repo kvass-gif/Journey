@@ -3,10 +3,10 @@ using Journey.Entities;
 
 namespace Journey.ViewModels.LandLord
 {
-    public class LandLordViewHandler
+    public class PlacesViewHandler
     {
         private readonly UnitOfWork unitOfWork;
-        public LandLordViewHandler(UnitOfWork unitOfWork)
+        public PlacesViewHandler(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
         }
@@ -60,7 +60,7 @@ namespace Journey.ViewModels.LandLord
             int pageSize = 20;
             placesView.PaginatedList = PaginatedList<Place>.Create(places, placesView.PageIndex ?? 1, pageSize);
         }
-        public Place HandleModel(Place place)
+        public Place HandleSinglePlaceModel(Place place)
         {
             if (place.Cities == null)
             {

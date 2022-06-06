@@ -93,7 +93,7 @@ namespace Journey.Data
             {
                 foreach (var place in places)
                 {
-                    var startDate = DateTime.Now.AddMonths(-12);
+                    var startDate = DateTime.Now.Date.AddMonths(-12);
                     var endDate = startDate;
                     for (int i = 0; i < 100; i++)
                     {

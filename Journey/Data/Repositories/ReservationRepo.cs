@@ -21,11 +21,21 @@ namespace Journey.Data.Repositories
                                 select a).Include(a => a.Place);
             return reservations;
         }
-        public IEnumerable<Reservation> ReservationsByPlaceId(int placeId)
+        public IEnumerable<Reservation> ReservationsByParams(int placeId, string selection)
         {
-            var arr = _reservations
-                .Where(a => a.PlaceId == placeId)
+            IEnumerable<Reservation> arr = _reservations.Where(a => a.PlaceId == placeId)
                 .Include(a => a.Place).ToArray();
+
+            if (selection == "Current" )
+            {
+                arr = arr.Where(a => (a.Status == Status.Waiting
+                || a.Status == Status.InPlace)
+                && a.ArrivalDate <= DateTime.Now.Date && a.DepartureDate >= DateTime.Now.Date);
+            }
+            else if (selection != "All reservations")
+            {
+                arr = arr.Where(a => a.Status.ToString() == selection);
+            }
             var reservations = from r in arr
                                join i in _identityUsers on r.AccountId equals i.Id
                                orderby r.DepartureDate

@@ -25,8 +25,6 @@ namespace Journey.Entities
         public string? AccountId { get; set; }
 
         [NotMapped]
-        public int MaxDurationDays { get; set; }
-        [NotMapped]
         public IdentityUser? Account { get; set; }
         [NotMapped]
         public int? Sum { get; set; }
