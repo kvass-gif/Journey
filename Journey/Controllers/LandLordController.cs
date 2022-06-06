@@ -8,7 +8,7 @@ using System.Security.Claims;
 
 namespace Journey.Controllers
 {
-    //[Authorize(Policy = "LandLordOnly")]
+    [Authorize(Policy = "LandLordOnly")]
     public class LandLordController : Controller
     {
         private readonly UnitOfWork unitOfWork;
@@ -22,8 +22,8 @@ namespace Journey.Controllers
         }
         public IActionResult Index(PlacesViewModel placesViewModel)
         {
-            //var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var accountId = "6862d78a-f6a9-47fe-be77-7b7469ac6e3b";
+            var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var accountId = "6862d78a-f6a9-47fe-be77-7b7469ac6e3b";
             lordViewHandler.HandlePlacesView(placesViewModel, accountId);
             return View(placesViewModel);
         }
@@ -41,8 +41,8 @@ namespace Journey.Controllers
             {
                 try
                 {
-                    //var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var accountId = "6862d78a-f6a9-47fe-be77-7b7469ac6e3b";
+                    var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    //var accountId = "6862d78a-f6a9-47fe-be77-7b7469ac6e3b";
 
                     place.AccountId = accountId;
                     unitOfWork.PlaceRepo.Add(place);

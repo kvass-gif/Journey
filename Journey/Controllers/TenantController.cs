@@ -1,5 +1,6 @@
 ﻿using Journey.Data;
 using Journey.Entities;
+using Journey.ViewModels.Tenant;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,20 +12,19 @@ namespace Journey.Controllers
     public class TenantController : Controller
     {
         private readonly UnitOfWork unitOfWork;
+        private readonly ReservationsViewHandler reservationsViewHandler;
         public TenantController(UnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+            reservationsViewHandler = new ReservationsViewHandler(unitOfWork);
         }
-        public IActionResult Index()
+        public IActionResult Reservations(ReservationsViewModel viewModel)
         {
             var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var arr = unitOfWork.ReservationRepo.ReservationsByTenantId(accountId).ToArray();
-            foreach (var item in arr)
-            {
-                item.Sum = (item.DepartureDate - item.ArrivalDate).Days * item.Place!.PricePerNight;
-            }
-            return View(arr);
+            //var accountId = "0da506ce-1cf7-4579-b7ad-b43b59880979";
+            viewModel.AccountId = accountId;
+            reservationsViewHandler.HandleReservationsView(viewModel);
+            return View(viewModel);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -45,7 +45,7 @@ namespace Journey.Controllers
                     reservation.AccountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     unitOfWork.ReservationRepo.Add(reservation);
                     unitOfWork.SaveApp();
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction(nameof(Reservations));
                 }
                 catch (DbUpdateException)
                 {
@@ -72,7 +72,7 @@ namespace Journey.Controllers
             }
             res.Status = Status.Canceled;
             unitOfWork.SaveApp();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Reservations));
         }
     }
 }

@@ -13,15 +13,23 @@ namespace Journey.Data.Repositories
             _reservations = appDbContext.Reservations;
             _identityUsers = accountDbContext.Users;
         }
-        public IEnumerable<Reservation> ReservationsByTenantId(string accountId)
+        public IEnumerable<Reservation> ReservationsByTenantId(string accountId, string selection)
         {
-            var reservations = (from a in _reservations
-                                where a.AccountId == accountId
-                                orderby a.Status
-                                select a).Include(a => a.Place);
-            return reservations;
+            IEnumerable<Reservation> arr = _reservations.Where(a => a.AccountId == accountId)
+                .Include(a => a.Place).ToArray();
+            if (selection == "Current")
+            {
+                arr = arr.Where(a => (a.Status == Status.Waiting
+                || a.Status == Status.InPlace)
+                && a.ArrivalDate <= DateTime.Now.Date && a.DepartureDate >= DateTime.Now.Date);
+            }
+            else if (selection != "All reservations")
+            {
+                arr = arr.Where(a => a.Status.ToString() == selection);
+            }
+            return arr;
         }
-        public IEnumerable<Reservation> ReservationsByParams(int placeId, string selection)
+        public IEnumerable<Reservation> ReservationsByParamsPlace(int placeId, string selection)
         {
             IEnumerable<Reservation> arr = _reservations.Where(a => a.PlaceId == placeId)
                 .Include(a => a.Place).ToArray();
