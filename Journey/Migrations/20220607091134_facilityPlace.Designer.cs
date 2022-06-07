@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220531095504_init")]
-    partial class init
+    [Migration("20220607091134_facilityPlace")]
+    partial class facilityPlace
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,61 @@ namespace Journey.Migrations
                         .IsUnique();
 
                     b.ToTable("Cities");
+                });
+
+            modelBuilder.Entity("Journey.Entities.Facility", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("Facilities");
+                });
+
+            modelBuilder.Entity("Journey.Entities.FacilityPlace", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FacilityId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FacilityId");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("FacilityPlaces");
                 });
 
             modelBuilder.Entity("Journey.Entities.Place", b =>
@@ -172,6 +227,25 @@ namespace Journey.Migrations
                     b.ToTable("Reservations");
                 });
 
+            modelBuilder.Entity("Journey.Entities.FacilityPlace", b =>
+                {
+                    b.HasOne("Journey.Entities.Facility", "Facility")
+                        .WithMany("Places")
+                        .HasForeignKey("FacilityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Journey.Entities.Place", "Place")
+                        .WithMany("Facilities")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Facility");
+
+                    b.Navigation("Place");
+                });
+
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
                     b.HasOne("Journey.Entities.City", "City")
@@ -207,8 +281,15 @@ namespace Journey.Migrations
                     b.Navigation("Places");
                 });
 
+            modelBuilder.Entity("Journey.Entities.Facility", b =>
+                {
+                    b.Navigation("Places");
+                });
+
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
+                    b.Navigation("Facilities");
+
                     b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618

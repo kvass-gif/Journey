@@ -6,7 +6,7 @@ namespace Journey.Data
 {
     public static class ApplicationDbSeeder
     {
-        private static IdentityUser[] FindUsersByRole(AccountDbContext accountDbContext, string role)
+        private static IdentityUser[] findUsersByRole(AccountDbContext accountDbContext, string role)
         {
             var users = (from r in accountDbContext.Roles
                          where r.Name == role
@@ -17,21 +17,38 @@ namespace Journey.Data
                          select u).ToArray();
             return users;
         }
-        public static void SeedData(ApplicationDbContext applicationDbContext, AccountDbContext accountDbContext)
+        private static void seedFacilitiesPlaces(DbSet<Place> places, 
+            Facility[] facilities, DbSet<FacilityPlace> facilityPlaces)
         {
-            SeedCities(applicationDbContext.Cities);
-            applicationDbContext.SaveChanges();
-            SeedTypes(applicationDbContext.PlaceTypes);
-            applicationDbContext.SaveChanges();
-            var landLords = FindUsersByRole(accountDbContext, "LandLord");
-            SeedPlaces(applicationDbContext.Places, landLords);
-            applicationDbContext.SaveChanges();
-            var tenants = FindUsersByRole(accountDbContext, "Tenant");
-            SeedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
-            applicationDbContext.SaveChanges();
+            if (!facilityPlaces.Any())
+            {
+                foreach (var place in places)
+                {
+                    foreach (var facility in facilities)
+                    {
+                        if(Faker.Boolean.Random())
+                        {
+                            facilityPlaces.Add(new FacilityPlace()
+                            {
+                                PlaceId = place.Id,
+                                FacilityId = facility.Id
+                            });
+                        }
+                    }
+                }
+            }
         }
-
-        private static void SeedTypes(DbSet<PlaceType> types)
+        private static void seedFacilities(DbSet<Facility> facilities)
+        {
+            if (!facilities.Any())
+            {
+                facilities.Add(new Facility() { Name = "Internet" });
+                facilities.Add(new Facility() { Name = "Gym" });
+                facilities.Add(new Facility() { Name = "Tv" });
+                facilities.Add(new Facility() { Name = "Kitchen" });
+            }
+        }
+        private static void seedTypes(DbSet<PlaceType> types)
         {
             if (!types.Any())
             {
@@ -41,7 +58,7 @@ namespace Journey.Data
             }
         }
 
-        private static void SeedCities(DbSet<City> cities)
+        private static void seedCities(DbSet<City> cities)
         {
             if (!cities.Any())
             {
@@ -52,8 +69,7 @@ namespace Journey.Data
                 cities.Add(new City() { CityName = "Mexico City" });
             }
         }
-
-        public static void SeedPlaces(DbSet<Place> places, IdentityUser[] landLordUsers)
+        private static void seedPlaces(DbSet<Place> places, IdentityUser[] landLordUsers)
         {
             if (!places.Any())
             {
@@ -72,7 +88,7 @@ namespace Journey.Data
                         CreatedAt = DateTime.Now.Date
                         .AddMonths(-1 * Faker.RandomNumber.Next(0, 12))
                         .AddDays(-1 * Faker.RandomNumber.Next(0, 30))
-                        .AddYears(-1 * Faker.RandomNumber.Next(0, 1))
+                        .AddYears(-1 * Faker.RandomNumber.Next(0, 1)),
                     };
                     if (place.PlaceTypeId == 3)
                     {
@@ -86,7 +102,7 @@ namespace Journey.Data
                 }
             }
         }
-        public static void SeedReservations(DbSet<Reservation> reservations,
+        private static void seedReservations(DbSet<Reservation> reservations,
             DbSet<Place> places, IdentityUser[] tenantUsers)
         {
             if (!reservations.Any())
@@ -137,8 +153,25 @@ namespace Journey.Data
                             });
                     }
                 }
-
             }
+        }
+        public static void SeedData(ApplicationDbContext applicationDbContext, AccountDbContext accountDbContext)
+        {
+            seedCities(applicationDbContext.Cities);
+            applicationDbContext.SaveChanges();
+            seedTypes(applicationDbContext.PlaceTypes);
+            applicationDbContext.SaveChanges();
+            seedFacilities(applicationDbContext.Facilities);
+            applicationDbContext.SaveChanges();
+            var landLords = findUsersByRole(accountDbContext, "LandLord");
+            seedPlaces(applicationDbContext.Places, landLords);
+            applicationDbContext.SaveChanges();
+            seedFacilitiesPlaces(applicationDbContext.Places, applicationDbContext.Facilities.ToArray(),
+                applicationDbContext.FacilityPlaces);
+            applicationDbContext.SaveChanges();
+            var tenants = findUsersByRole(accountDbContext, "Tenant");
+            seedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
+            applicationDbContext.SaveChanges();
         }
     }
 }

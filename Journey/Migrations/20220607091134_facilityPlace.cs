@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Journey.Migrations
 {
-    public partial class init : Migration
+    public partial class facilityPlace : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -22,6 +22,21 @@ namespace Journey.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Facilities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Facilities", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +90,34 @@ namespace Journey.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FacilityPlaces",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FacilityId = table.Column<int>(type: "int", nullable: false),
+                    PlaceId = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FacilityPlaces", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FacilityPlaces_Facilities_FacilityId",
+                        column: x => x.FacilityId,
+                        principalTable: "Facilities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FacilityPlaces_Places_PlaceId",
+                        column: x => x.PlaceId,
+                        principalTable: "Places",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reservations",
                 columns: table => new
                 {
@@ -107,6 +150,22 @@ namespace Journey.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Facilities_Name",
+                table: "Facilities",
+                column: "Name",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FacilityPlaces_FacilityId",
+                table: "FacilityPlaces",
+                column: "FacilityId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FacilityPlaces_PlaceId",
+                table: "FacilityPlaces",
+                column: "PlaceId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Places_CityId",
                 table: "Places",
                 column: "CityId");
@@ -136,7 +195,13 @@ namespace Journey.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "FacilityPlaces");
+
+            migrationBuilder.DropTable(
                 name: "Reservations");
+
+            migrationBuilder.DropTable(
+                name: "Facilities");
 
             migrationBuilder.DropTable(
                 name: "Places");

@@ -12,6 +12,7 @@ namespace Journey.Data
         private TypeRepo typeRepo;
         private PlaceRepo placeRepo;
         private ReservationRepo reservationRepo;
+        private FacilityRepo facilityRepo;
         public UnitOfWork(ApplicationDbContext app, AccountDbContext account)
         {
             this.app = app;
@@ -59,6 +60,17 @@ namespace Journey.Data
                     reservationRepo = new ReservationRepo(app, account);
                 }
                 return reservationRepo;
+            }
+        }
+        public FacilityRepo FacilityRepo
+        {
+            get
+            {
+                if (facilityRepo == null)
+                {
+                    facilityRepo = new FacilityRepo(app);
+                }
+                return facilityRepo;
             }
         }
         public void SaveApp()

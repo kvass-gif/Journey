@@ -25,6 +25,8 @@ namespace Journey.Entities
         [Required]
         public string Address { get; set; }
         public ICollection<Reservation>? Reservations { get; set; }
+        public ICollection<FacilityPlace>? Facilities { get; set; }
+
         [Required]
         public int CityId { get; set; }
         public City? City { get; set; }

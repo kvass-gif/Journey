@@ -1,4 +1,5 @@
 ﻿using Journey.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Journey.ViewModels.Home
 {
@@ -20,6 +21,10 @@ namespace Journey.ViewModels.Home
         public string RankSortParam { get; set; } = "";
         public string PriceSortParam { get; set; } = "Price_desc";
         public string NewestSortParam { get; set; } = "Newest_desc";
+
+        public string[] Facilities { get; set; } = new string[4];
+        public List<SelectListItem> ListFacilities { get; set; }
+
         public PaginatedList<Place> PaginatedList { get; set; }
     }
 }

@@ -11,6 +11,8 @@ namespace Journey.Data
         public DbSet<PlaceType> PlaceTypes { get; set; }
         public DbSet<Place> Places { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
+        public DbSet<Facility> Facilities { get; set; }
+        public DbSet<FacilityPlace> FacilityPlaces { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             

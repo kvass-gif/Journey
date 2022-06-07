@@ -80,7 +80,8 @@ namespace Journey.Data.Repositories
             {
                 places = places.Where(a => a.BedsCount == indexView.BedsCount);
             }
-            places = places.Include(a => a.City).Include(a => a.Reservations);
+            places = places.Include(a => a.City).Include(a => a.Reservations)
+                .Include(a => a.Facilities).ThenInclude(a => a.Facility);
             List<Place> result = filterPlaces(places, indexView.ArrivalDate, indexView.DepartureDate);
             joinWithAccounts(result);
             return result;
@@ -90,6 +91,7 @@ namespace Journey.Data.Repositories
             var place = (from c in _places
                          where c.Id == id
                          select c).Include(a => a.PlaceType)
+                         .Include(a => a.Facilities).ThenInclude(a => a.Facility)
                          .Include(a => a.City).SingleOrDefault();
             return place;
         }

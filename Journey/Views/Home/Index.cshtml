@@ -106,6 +106,7 @@
                            asp-route-lowerPrice="@Model.LowerPrice"
                            asp-route-upperPrice="@Model.UpperPrice"
                            asp-route-bedsCount="@Model.BedsCount"
+                           asp-route-facilities="@Model.Facilities"
                            asp-route-pageIndex="@res">Price</a>
                     </li>
                     <li>
@@ -165,6 +166,21 @@
                 <input type="hidden" value="@Model.BedsCount" name="bedsCount" id="bCount" />
             </div>
         </div>
+    </div>
+    <div class="w-25">
+        <h4 class="mb-3" style="font-size: 20px; font-weight: 700;">Facilities</h4>
+        @foreach (var listItem in Model.ListFacilities)
+        {
+            <div class="row" style="height: 30px;">
+                <div class="col">
+                    @listItem.Text
+                </div>
+                <div class="col text-end">
+                    <input class="form-check-input" type="checkbox" value="@listItem.Value" checked="@listItem.Selected" id="@listItem.Value"
+                       name="Facilities">
+                </div>
+            </div>
+        }
     </div>
 </form>
 <h2>Places</h2>
@@ -255,6 +271,8 @@
                asp-route-upperPrice="@Model.UpperPrice"
                asp-route-bedsCount="@Model.BedsCount"
                asp-route-pageIndex="@i"
+               asp-route-facilities=""
+               
                class="page-link">@i</a>
             </li>
         }
@@ -393,5 +411,12 @@
             bedsCount.value = calculateBeds.innerHTML;
             document.forms["filterParameters"].submit();
         }
+        ///////////////////////////////
+        let facilities = document.getElementsByName("Facilities");
+        facilities.forEach(element => {
+            element.onchange = function () {
+                document.forms["filterParameters"].submit();
+            };
+        });
     </script>
 }
