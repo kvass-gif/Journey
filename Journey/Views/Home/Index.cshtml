@@ -193,6 +193,9 @@
     <thead>
         <tr>
             <th>
+                Photo
+            </th>
+            <th>
                 PlaceName
             </th>
             <th>
@@ -227,12 +230,16 @@
         {
             <tr>
                 <td>
+                    <img src="~/images/@item.Photos.First().PhotoName"
+                     asp-append-version="true" alt="" style="width:100px; height:100px" />
+                </td>
+                <td>
                     <a asp-controller="Home" asp-action="Details"
                    asp-route-id="@item.Id"
                    asp-route-arrivalDate="@arrivalStr"
                    asp-route-departureDate="@departureStr">@item.PlaceName</a>
                 </td>
-                <td>item.Account!.UserName</td>
+                <td>@item.Account!.UserName</td>
                 <td>@item.PricePerNight</td>
                 <td>@item.Rank</td>
                 <td>@item.City!.CityName</td>

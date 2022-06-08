@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -26,6 +27,7 @@ namespace Journey.Entities
         public string Address { get; set; }
         public ICollection<Reservation>? Reservations { get; set; }
         public ICollection<FacilityPlace>? Facilities { get; set; }
+        public ICollection<Photo>? Photos { get; set; }
 
         [Required]
         public int CityId { get; set; }
@@ -46,5 +48,13 @@ namespace Journey.Entities
         public DateTime? ArrivalDate { get; set; }
         [NotMapped]
         public DateTime? DepartureDate { get; set; }
+
+        [NotMapped]
+        public List<SelectListItem>? ListFacilities { get; set; }
+
+        [NotMapped]
+        public string[] FacilitiesArr { get; set; } = new string[4];
+        [NotMapped]
+        public IFormFile? Image { get; set; }
     }
 }

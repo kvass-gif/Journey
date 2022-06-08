@@ -17,7 +17,7 @@ namespace Journey.Data
                          select u).ToArray();
             return users;
         }
-        private static void seedFacilitiesPlaces(DbSet<Place> places, 
+        private static void seedFacilitiesPlaces(DbSet<Place> places,
             Facility[] facilities, DbSet<FacilityPlace> facilityPlaces)
         {
             if (!facilityPlaces.Any())
@@ -26,7 +26,7 @@ namespace Journey.Data
                 {
                     foreach (var facility in facilities)
                     {
-                        if(Faker.Boolean.Random())
+                        if (Faker.Boolean.Random())
                         {
                             facilityPlaces.Add(new FacilityPlace()
                             {
@@ -155,7 +155,8 @@ namespace Journey.Data
                 }
             }
         }
-        public static void SeedData(ApplicationDbContext applicationDbContext, AccountDbContext accountDbContext)
+        public static void SeedData(ApplicationDbContext applicationDbContext,
+            AccountDbContext accountDbContext, FilePhotoRepo filePhotoRepo)
         {
             seedCities(applicationDbContext.Cities);
             applicationDbContext.SaveChanges();
@@ -171,7 +172,36 @@ namespace Journey.Data
             applicationDbContext.SaveChanges();
             var tenants = findUsersByRole(accountDbContext, "Tenant");
             seedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
+            seedPhotos(applicationDbContext.Photos, applicationDbContext.Places, filePhotoRepo);
             applicationDbContext.SaveChanges();
+        }
+        
+        private static void seedPhotos(DbSet<Photo> photos, DbSet<Place> places, FilePhotoRepo filePhoto)
+        {
+            if (!photos.Any())
+            {
+                string sourcePath = filePhoto.CurrentPath("seederImages");
+                string targetPath = filePhoto.CurrentPath("images"); ;
+                if (Directory.Exists(sourcePath))
+                {
+                    string[] files = Directory.GetFiles(sourcePath);
+                    foreach (var place in places)
+                    {
+                        var photo = new Photo();
+                        int index = Faker.RandomNumber.Next(0, files.Length - 1);
+                        string fileName = Path.GetFileName(files[index]);
+                        photo.PhotoName = filePhoto.UniquePhotoName(fileName);
+                        photo.PlaceId = place.Id;
+                        photos.Add(photo);
+                        string destFile = Path.Combine(targetPath, photo.PhotoName);
+                        File.Copy(files[index], destFile, true);
+                    }
+                }
+                else
+                {
+                    throw new Exception("Source path does not exist!");
+                }
+            }
         }
     }
 }

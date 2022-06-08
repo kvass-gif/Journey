@@ -4,7 +4,7 @@
     ViewData["Title"] = "Register object";
 }
 <h1>LandLord page</h1>
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="border p-3 mt-4">
         <div class="row pb-2">
             <h2 class="text-primary">
@@ -13,6 +13,19 @@
             <hr />
         </div>
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <div class="custom-file">
+                    <label class="custom-file-label">Choose file</label>
+                    <input asp-for="Image" class="custom-file-input">
+                </div>
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+        </div>
+        <div style="padding:10px;">
+            <img src="" alt="" style="width:300px" />
+        </div>
         <div class="mb-3">
             <label asp-for="PlaceName"></label>
             <input asp-for="PlaceName" class="form-control" />
@@ -43,6 +56,21 @@
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
         </div>
+        <div class="w-25">
+            <h4 class="mb-3" style="font-size: 20px; font-weight: 700;">Facilities</h4>
+            @foreach (var listItem in Model.ListFacilities)
+            {
+                <div class="row" style="height: 30px;">
+                    <div class="col">
+                        @listItem.Text
+                    </div>
+                    <div class="col text-end">
+                        <input class="form-check-input" type="checkbox" value="@listItem.Value" checked="@listItem.Selected" id="@listItem.Value"
+                           name="FacilitiesArr">
+                    </div>
+                </div>
+            }
+        </div>
         <div class="mb-3">
             <select class="form-select bg-light" aria-label="Default select example" id="CityId" name="CityId"
                     style="font-size:15px; border: none; padding-top: 0;">
@@ -69,6 +97,25 @@
         </div>
     </div>
 </form>
+
 @section Scripts{
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        var input = document.querySelector('input[type=file]');
+        input.addEventListener("change", function() {
+            var preview = document.querySelector('img');
+            var file = input.files[0];
+            var reader = new FileReader();
+            reader.onloadend = function() {
+                preview.src = reader.result;
+            }
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+            else {
+                preview.src = "";
+            }
+        });
+    </script>
 }
+

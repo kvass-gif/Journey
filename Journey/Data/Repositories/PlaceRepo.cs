@@ -8,10 +8,12 @@ namespace Journey.Data.Repositories
     public class PlaceRepo
     {
         private readonly DbSet<Place> _places;
+        private readonly DbSet<FacilityPlace> _facilityPlaces;
         private readonly DbSet<IdentityUser> _identityUsers;
         public PlaceRepo(ApplicationDbContext appDbContext, AccountDbContext accountDbContext)
         {
             _places = appDbContext.Places;
+            _facilityPlaces = appDbContext.FacilityPlaces;
             _identityUsers = accountDbContext.Users;
         }
         public IQueryable<Place> Places(string accountId)
@@ -80,7 +82,9 @@ namespace Journey.Data.Repositories
             {
                 places = places.Where(a => a.BedsCount == indexView.BedsCount);
             }
-            places = places.Include(a => a.City).Include(a => a.Reservations)
+            places = places.Include(a => a.City)
+                .Include(a => a.Reservations)
+                .Include(a => a.Photos)
                 .Include(a => a.Facilities).ThenInclude(a => a.Facility);
             List<Place> result = filterPlaces(places, indexView.ArrivalDate, indexView.DepartureDate);
             joinWithAccounts(result);
@@ -92,7 +96,8 @@ namespace Journey.Data.Repositories
                          where c.Id == id
                          select c).Include(a => a.PlaceType)
                          .Include(a => a.Facilities).ThenInclude(a => a.Facility)
-                         .Include(a => a.City).SingleOrDefault();
+                         .Include(a => a.City)
+                         .Include(a => a.Photos).SingleOrDefault();
             return place;
         }
         public void Update(Place other)
@@ -101,7 +106,19 @@ namespace Journey.Data.Repositories
         }
         public void Add(Place obj)
         {
+            obj.CreatedAt = DateTime.Now;
             _places.Add(obj);
+        }
+        public void AddFacilities(Place obj)
+        {
+            var place = _places.OrderByDescending(a => a.CreatedAt).Last();
+            foreach (var item in obj.FacilitiesArr)
+            {
+                var fp = new FacilityPlace();
+                fp.PlaceId = place.Id;
+                fp.FacilityId = int.Parse(item);
+                _facilityPlaces.Add(fp);
+            }
         }
         public void Remove(Place obj)
         {

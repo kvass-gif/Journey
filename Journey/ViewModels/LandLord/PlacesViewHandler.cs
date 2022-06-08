@@ -1,5 +1,6 @@
 ﻿using Journey.Data;
 using Journey.Entities;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Journey.ViewModels.LandLord
 {
@@ -57,6 +58,8 @@ namespace Journey.ViewModels.LandLord
             var places = unitOfWork.PlaceRepo.Places(accountId);
             places = searchFilter(placesView.SearchString, places);
             places = sort(placesView.CurrentSort, places);
+
+
             int pageSize = 20;
             placesView.PaginatedList = PaginatedList<Place>.Create(places, placesView.PageIndex ?? 1, pageSize);
         }
@@ -69,6 +72,19 @@ namespace Journey.ViewModels.LandLord
             if (place.PlaceTypes == null)
             {
                 place.PlaceTypes = unitOfWork.TypeRepo.ToDictionary();
+            }
+            if (place.ListFacilities == null)
+            {
+                List<SelectListItem> items = new List<SelectListItem>();
+                foreach (var item in unitOfWork.FacilityRepo.Facilities())
+                {
+                    items.Add(new SelectListItem
+                    {
+                        Text = item.Name.ToString(),
+                        Value = item.Id.ToString()
+                    });
+                }
+                place.ListFacilities = items;
             }
             return place;
         }

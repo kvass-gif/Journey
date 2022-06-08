@@ -103,6 +103,36 @@ namespace Journey.Migrations
                     b.ToTable("FacilityPlaces");
                 });
 
+            modelBuilder.Entity("Journey.Entities.Photo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PhotoName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("PlaceId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PhotoName");
+
+                    b.HasIndex("PlaceId");
+
+                    b.ToTable("Photos");
+                });
+
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
                     b.Property<int>("Id")
@@ -244,6 +274,17 @@ namespace Journey.Migrations
                     b.Navigation("Place");
                 });
 
+            modelBuilder.Entity("Journey.Entities.Photo", b =>
+                {
+                    b.HasOne("Journey.Entities.Place", "Place")
+                        .WithMany("Photos")
+                        .HasForeignKey("PlaceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Place");
+                });
+
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
                     b.HasOne("Journey.Entities.City", "City")
@@ -287,6 +328,8 @@ namespace Journey.Migrations
             modelBuilder.Entity("Journey.Entities.Place", b =>
                 {
                     b.Navigation("Facilities");
+
+                    b.Navigation("Photos");
 
                     b.Navigation("Reservations");
                 });

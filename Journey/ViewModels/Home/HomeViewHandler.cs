@@ -104,7 +104,7 @@ namespace Journey.ViewModels.Home
             
             indexView.ListFacilities = listFacilities(indexView);
             places = filterFacilities(places, indexView.ListFacilities);
-            int pageSize = 20;
+            int pageSize = 12;
             indexView.PaginatedList = PaginatedList<Place>.Create(places, indexView.PageIndex ?? 1, pageSize);
         }
     }

@@ -3,6 +3,7 @@ using Journey.Entities;
 using Journey.ViewModels.LandLord;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
@@ -14,17 +15,20 @@ namespace Journey.Controllers
         private readonly UnitOfWork unitOfWork;
         private readonly PlacesViewHandler lordViewHandler;
         private readonly ReservationsViewHandler reservationsViewHandler;
-        public LandLordController(UnitOfWork unitOfWork)
+        private readonly FilePhotoRepo _filePhotoRepo;
+        public LandLordController(UnitOfWork unitOfWork, FilePhotoRepo filePhotoRepo)
         {
             this.unitOfWork = unitOfWork;
             lordViewHandler = new PlacesViewHandler(unitOfWork);
             reservationsViewHandler = new ReservationsViewHandler(unitOfWork);
+            _filePhotoRepo = filePhotoRepo;
         }
         public IActionResult Index(PlacesViewModel placesViewModel)
         {
             var accountId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var accountId = "6862d78a-f6a9-47fe-be77-7b7469ac6e3b";
             lordViewHandler.HandlePlacesView(placesViewModel, accountId);
+
             return View(placesViewModel);
         }
         public IActionResult RegisterObject()
@@ -37,6 +41,7 @@ namespace Journey.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult RegisterObject(Place place)
         {
+            place.Id = 0;
             if (ModelState.IsValid)
             {
                 try
@@ -46,6 +51,15 @@ namespace Journey.Controllers
 
                     place.AccountId = accountId;
                     unitOfWork.PlaceRepo.Add(place);
+                    unitOfWork.SaveApp();
+                    unitOfWork.PlaceRepo.AddFacilities(place);
+                    unitOfWork.SaveApp();
+                    string uniq = _filePhotoRepo.UniquePhotoName(place.Image.FileName);
+                    var photo = new Photo();
+                    photo.PlaceId = place.Id;
+                    photo.PhotoName = uniq;
+                    unitOfWork.PhotoRepo.Add(photo);
+                    _filePhotoRepo.UploadFile(place.Image, uniq);
                     unitOfWork.SaveApp();
                     return RedirectToAction(nameof(Index));
                 }

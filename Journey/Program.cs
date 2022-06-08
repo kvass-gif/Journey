@@ -54,6 +54,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connection);
 });
 builder.Services.AddScoped<UnitOfWork>();
+builder.Services.AddScoped<FilePhotoRepo>();
 builder.Services.AddControllersWithViews();
 var app = builder.Build();
 using (var serviceScope = app.Services.CreateScope())
@@ -63,8 +64,9 @@ using (var serviceScope = app.Services.CreateScope())
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var accountDbContext = services.GetRequiredService<AccountDbContext>();
     var dbContext = services.GetRequiredService<ApplicationDbContext>();
+    var filePhoto = services.GetRequiredService<FilePhotoRepo>();
     AccountSeeder.SeedData(userManager, roleManager);
-    ApplicationDbSeeder.SeedData(dbContext, accountDbContext);
+    ApplicationDbSeeder.SeedData(dbContext, accountDbContext, filePhoto);
 }
 app.UseRouting();
 app.UseAuthentication();
@@ -74,11 +76,11 @@ app.UseStaticFiles();
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=LandLord}/{action=Reservations}/{PlaceId=301}");
+//app.MapControllerRoute(
+//    name: "default",
+//    pattern: "{controller=LandLord}/{action=RegisterObject}/{id=1}");
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-//app.MapControllerRoute(
-//    name: "default",
-//    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
 app.Run();
