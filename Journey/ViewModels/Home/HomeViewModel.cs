@@ -23,6 +23,7 @@ namespace Journey.ViewModels.Home
         public string NewestSortParam { get; set; } = "Newest_desc";
 
         public string[] Facilities { get; set; } = new string[4];
+        public string FacilitiesStr { get; set; } = string.Empty;
         public List<SelectListItem> ListFacilities { get; set; }
 
         public PaginatedList<Place> PaginatedList { get; set; }

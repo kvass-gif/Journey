@@ -11,6 +11,8 @@
     var nextDisabled = !Model.PaginatedList.HasNextPage ? "disabled" : "";
     var res = Model.PaginatedList.PageIndex >= Model.PaginatedList.TotalPages
                ? (Model.PaginatedList.TotalPages - 1) : Model.PaginatedList.PageIndex;
+
+    var facilitiesStr = string.Join('.', Model.Facilities);
 }
 <form asp-action="Index" asp-controller="Home" id="filterParameters" method="get">
     <div class="d-flex justify-content-center">
@@ -107,6 +109,7 @@
                            asp-route-upperPrice="@Model.UpperPrice"
                            asp-route-bedsCount="@Model.BedsCount"
                            asp-route-facilities="@Model.Facilities"
+                           asp-route-facilitiesStr="@facilitiesStr"
                            asp-route-pageIndex="@res">Price</a>
                     </li>
                     <li>
@@ -121,6 +124,7 @@
                            asp-route-lowerPrice="@Model.LowerPrice"
                            asp-route-upperPrice="@Model.UpperPrice"
                            asp-route-bedsCount="@Model.BedsCount"
+                           asp-route-facilitiesStr="@facilitiesStr"
                            asp-route-pageIndex="@res">Rank</a>
                     </li>
                     <li>
@@ -135,6 +139,7 @@
                            asp-route-lowerPrice="@Model.LowerPrice"
                            asp-route-upperPrice="@Model.UpperPrice"
                            asp-route-bedsCount="@Model.BedsCount"
+                           asp-route-facilitiesStr="@facilitiesStr"
                            asp-route-pageIndex="@res">Newest</a>
                     </li>
                 </ul>
@@ -253,6 +258,7 @@
                asp-route-upperPrice="@Model.UpperPrice"
                asp-route-bedsCount="@Model.BedsCount"
                asp-route-pageIndex="@(Model.PaginatedList.PageIndex - 1)"
+               asp-route-facilitiesStr="@facilitiesStr"
                class="btn btn-default @prevDisabled">
                 Previous
             </a>
@@ -271,8 +277,7 @@
                asp-route-upperPrice="@Model.UpperPrice"
                asp-route-bedsCount="@Model.BedsCount"
                asp-route-pageIndex="@i"
-               asp-route-facilities=""
-               
+               asp-route-facilitiesStr="@facilitiesStr"
                class="page-link">@i</a>
             </li>
         }
@@ -288,6 +293,7 @@
                asp-route-upperPrice="@Model.UpperPrice"
                asp-route-bedsCount="@Model.BedsCount"
                asp-route-pageIndex="@(Model.PaginatedList.PageIndex + 1)"
+               asp-route-facilitiesStr="@facilitiesStr"
                class="btn btn-default @nextDisabled">
                 Next
             </a>
@@ -414,7 +420,7 @@
         ///////////////////////////////
         let facilities = document.getElementsByName("Facilities");
         facilities.forEach(element => {
-            element.onchange = function () {
+            element.onchange = function() {
                 document.forms["filterParameters"].submit();
             };
         });

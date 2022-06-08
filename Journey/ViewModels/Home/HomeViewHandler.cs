@@ -31,6 +31,10 @@ namespace Journey.ViewModels.Home
         }
         private List<SelectListItem> listFacilities(HomeViewModel indexView)
         {
+            if (!string.IsNullOrEmpty(indexView.FacilitiesStr))
+            {
+                indexView.Facilities = indexView.FacilitiesStr.Split('.');
+            }
             List<SelectListItem> items = new List<SelectListItem>();
             foreach (var item in unitOfWork.FacilityRepo.Facilities())
             {
@@ -97,6 +101,7 @@ namespace Journey.ViewModels.Home
             var places = unitOfWork.PlaceRepo.Places(indexView);
             places = searchFilter(indexView.SearchString, places);
             places = sort(indexView.CurrentSort, places);
+            
             indexView.ListFacilities = listFacilities(indexView);
             places = filterFacilities(places, indexView.ListFacilities);
             int pageSize = 20;
