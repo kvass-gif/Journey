@@ -167,7 +167,7 @@
             @for (int i = 0; i < arr.Count();)
             {
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-4 g-4 mb-3 ">
-                    @for (int j = 0; j < 4; j++, i++)
+                    @for (int j = 0; j < 4 && i < arr.Count(); j++, i++)
                     {
                         <div class="col">
                             <div class="card shadow-sm bg-light">
