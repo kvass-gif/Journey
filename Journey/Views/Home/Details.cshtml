@@ -92,10 +92,10 @@
                 <label asp-for="Facilities"></label>
             </dt>
             <dd class="col-sm-10">
-                <ul class="list-group">
+                <ul>
                     @foreach (var item in Model.Facilities)
                     {
-                        <li class="list-group-item">@item.Facility.Name</li>
+                        <li>@item.Facility.Name</li>
                     }
                 </ul>
             </dd>
