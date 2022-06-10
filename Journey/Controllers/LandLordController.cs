@@ -142,6 +142,10 @@ namespace Journey.Controllers
             try
             {
                 unitOfWork.PlaceRepo.Remove(obj);
+                foreach (var item in obj.Photos)
+                {
+                    _filePhotoRepo.DeleteFile(item.PhotoName);
+                }
                 unitOfWork.SaveApp();
                 return RedirectToAction(nameof(Index));
             }
