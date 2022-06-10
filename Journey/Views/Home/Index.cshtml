@@ -171,7 +171,7 @@
                     {
                         <div class="col">
                             <div class="card shadow-sm bg-light">
-                                <img src="~/images/@arr[j].Photos.First().PhotoName"
+                                <img src="~/images/@arr[i].Photos.First().PhotoName"
                              asp-append-version="true" alt="" style="height: 150px;" />
                                 <div class="position-absolute bg-light p-1 end-0"
                              style="top: 25px; border-radius: 5px 0 0 5px ;">
@@ -180,13 +180,13 @@
                                 <div class="card-body">
                                     <span>
                                         <a asp-controller="Home" asp-action="Details"
-                                   asp-route-id="@arr[j].Id"
+                                   asp-route-id="@arr[i].Id"
                                    asp-route-arrivalDate="@arrivalStr"
-                                   asp-route-departureDate="@departureStr">@arr[j].PlaceName</a>
+                                   asp-route-departureDate="@departureStr">@arr[i].PlaceName</a>
                                     </span>
                                     <br>
-                                    <span class="card-text">@arr[j].City.CityName, @arr[j].Address</span><br>
-                                    <span>@arr[j].Rank</span>
+                                    <span class="card-text">@arr[i].City.CityName, @arr[i].Address</span><br>
+                                    <span>@arr[i].Rank</span>
                                 </div>
                             </div>
                         </div>
@@ -196,7 +196,6 @@
         </div>
         <div class="mb-3 ms-3" style="width: 200px;">
             <h3 class="mb-3" style="font-size: 20px; font-weight: 700;">Price</h3>
-            <!-- фільтрування по параметрам які представлення нижче гет -->
             <div class="row g-3 mb-3">
                 <div class="col">
                     <input type="number" min="0" max="100" value="@Model.LowerPrice" class="form-control" id="inputLower" name="lowerPrice"

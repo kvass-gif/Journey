@@ -35,5 +35,9 @@ namespace Journey.Controllers
             obj.DepartureDate = departureDate;
             return View(obj);
         }
+        public IActionResult About()
+        {
+            return View();
+        }
     }
 }
