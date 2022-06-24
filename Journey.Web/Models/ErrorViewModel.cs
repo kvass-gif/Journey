@@ -1,4 +1,4 @@
-namespace WebApplication1.Models
+namespace Journey.Web.Models
 {
     public class ErrorViewModel
     {
