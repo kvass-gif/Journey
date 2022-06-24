@@ -1,5 +1,4 @@
 ﻿using Journey.Data.Repositories;
-using Journey.Entities;
 
 namespace Journey.Data
 {
