@@ -1,15 +1,18 @@
-﻿using Journey.Console;
+﻿using Journey.DataAccess;
 using Journey.DataAccess.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
-var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-var appCofiguration = new AppConfiguration();
-optionsBuilder.UseSqlServer(appCofiguration.SQLConnectionString);
-using (var db = new ApplicationDbContext(optionsBuilder.Options))
+IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
+IConfigurationRoot root = builder.Build();
+var database = root.GetSection("Database").GetSection("ConnectionString").Value;
+var contextOptions = new DbContextOptionsBuilder<ApplicationDbContext>()
+    .UseSqlServer(database)
+    .Options;
+ApplicationDbContext applicationDbContext = new ApplicationDbContext(contextOptions);
+IUnitOfWork uof = new UnitOfWork(applicationDbContext);
+foreach (var place in uof.PlaceRepo.GetAllAsync().Result)
 {
-    var el = db.Places.ToArray();
-    foreach (var place in el)
-    {
-        Console.WriteLine(place.PlaceName);
-    }
+    Console.WriteLine(place.PlaceName);
 }
+

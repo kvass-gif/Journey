@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Journey.DataAccess.Entities
 {
-    [Index(nameof(PlaceName))]
     public class Place
     {
         public long PlaceId { get; set; }

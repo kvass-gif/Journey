@@ -1,5 +1,4 @@
 ﻿using Journey.DataAccess.Entities;
 
 namespace Journey.DataAccess.Repositories;
-
-public interface ICityRepository : IBaseRepository<Place> { }
+public interface IPlaceRepository : IBaseRepository<Place> { }

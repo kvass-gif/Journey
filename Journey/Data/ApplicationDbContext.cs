@@ -7,6 +7,7 @@ namespace Journey.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+           
         }
         public DbSet<City> Cities { get; set; }
         public DbSet<PlaceType> PlaceTypes { get; set; }

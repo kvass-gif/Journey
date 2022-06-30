@@ -1,23 +1,20 @@
-﻿using Journey.DataAccess.Database;
+﻿using Journey.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journey.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext applicationDbContext;
-        public HomeController(ApplicationDbContext applicationDbContext)
+        private readonly IPlaceService _placeService;
+        public HomeController(IPlaceService placeService)
         {
-            this.applicationDbContext = applicationDbContext;
+            _placeService = placeService;
         }
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-
-            var el = applicationDbContext.Places.ToArray();
+            var el = await _placeService.GetAllByListAsync();
             return View(el);
         }
-
         public IActionResult Privacy()
         {
             return View();

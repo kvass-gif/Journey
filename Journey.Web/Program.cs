@@ -1,30 +1,27 @@
+using Journey.Application;
+using Journey.DataAccess;
 using Journey.DataAccess.Database;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 builder.Services.AddControllersWithViews();
-string connection = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    options.UseSqlServer(connection);
-});
-var app = builder.Build();
+builder.Services.AddDataAccess(builder.Configuration)
+    .AddApplication(builder.Environment);
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+var app = builder.Build();
+if (app.Environment.IsDevelopment() == true)
 {
     app.UseExceptionHandler("/Home/Error");
+    using (var scope = app.Services.CreateScope())
+    {
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        AutomatedMigration.Migrate(context);
+        DatabaseContextSeed.SeedDatabase(context);
+    }
 }
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();
