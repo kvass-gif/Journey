@@ -1,11 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using Journey.DataAccess.Common;
 
 namespace Journey.DataAccess.Entities
 {
-    public class Place
+    public class Place : BaseEntity, IAuditedEntity
     {
-        public long PlaceId { get; set; }
         public string PlaceName { get; set; }
     }
 }

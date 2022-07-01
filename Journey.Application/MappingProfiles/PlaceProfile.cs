@@ -4,9 +4,9 @@ using Journey.DataAccess.Entities;
 
 namespace Journey.MappingProciles;
 
-public class TodoItemProfile : Profile
+public class PlaceProfile : Profile
 {
-    public TodoItemProfile()
+    public PlaceProfile()
     {
         CreateMap<Place, PlaceResponseModel>();
     }

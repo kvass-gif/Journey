@@ -5,9 +5,9 @@ namespace Journey.DataAccess;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly ApplicationDbContext _context;
+    private readonly JourneyWebContext _context;
     private PlaceRepository placeRepo;
-    public UnitOfWork(ApplicationDbContext context)
+    public UnitOfWork(JourneyWebContext context)
     {
         _context = context;
     }

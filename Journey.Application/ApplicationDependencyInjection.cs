@@ -1,5 +1,7 @@
 ﻿using Journey.Application.Services;
 using Journey.Application.Services.Impl;
+using Journey.DataAccess.Services;
+using Journey.DataAccess.Services.Impl;
 using Journey.MappingProciles;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,7 @@ public static class ApplicationDependencyInjection
     private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
     {
         services.AddScoped<IPlaceService, PlaceService>();
+        services.AddScoped<IClaimService, ClaimService>();
     }
     private static void RegisterAutoMapper(this IServiceCollection services)
     {

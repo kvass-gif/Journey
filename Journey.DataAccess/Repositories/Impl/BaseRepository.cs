@@ -6,11 +6,11 @@ namespace Journey.DataAccess.Repositories;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    protected readonly ApplicationDbContext Context;
+    protected readonly JourneyWebContext context;
     protected readonly DbSet<TEntity> DbSet;
-    public BaseRepository(ApplicationDbContext context)
+    public BaseRepository(JourneyWebContext context)
     {
-        Context = context;
+        this.context = context;
         DbSet = context.Set<TEntity>();
     }
     public async Task<TEntity> AddAsync(TEntity entity)

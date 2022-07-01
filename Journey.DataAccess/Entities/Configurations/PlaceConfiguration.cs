@@ -7,7 +7,7 @@ namespace Journey.DataAccess.Entities.Configurations
     {
         public void Configure(EntityTypeBuilder<Place> builder)
         {
-            builder.HasKey(a => a.PlaceId);
+            builder.HasKey(a => a.Id);
             builder.HasIndex(a => a.PlaceName);
         }
     }

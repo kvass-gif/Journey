@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Journey.Application.Models;
 using Journey.DataAccess;
-using Journey.DataAccess.Repositories;
 
 namespace Journey.Application.Services.Impl;
 
@@ -17,13 +16,13 @@ public class PlaceService : IPlaceService
     public async Task<IEnumerable<PlaceResponseModel>> GetAllByListIdAsync(long id,
         CancellationToken cancellationToken = default)
     {
-        var todoItems = await _unitOfWork.PlaceRepo.GetAllAsync(ti => ti.PlaceId == id);
-        return _mapper.Map<IEnumerable<PlaceResponseModel>>(todoItems);
+        var places = await _unitOfWork.PlaceRepo.GetAllAsync(ti => ti.Id == id);
+        return _mapper.Map<IEnumerable<PlaceResponseModel>>(places);
     }
     public async Task<IEnumerable<PlaceResponseModel>> GetAllByListAsync(
         CancellationToken cancellationToken = default)
     {
-        var todoItems = await _unitOfWork.PlaceRepo.GetAllAsync();
-        return _mapper.Map<IEnumerable<PlaceResponseModel>>(todoItems);
+        var places = await _unitOfWork.PlaceRepo.GetAllAsync();
+        return _mapper.Map<IEnumerable<PlaceResponseModel>>(places);
     }
 }
