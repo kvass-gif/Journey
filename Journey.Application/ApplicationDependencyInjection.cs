@@ -18,6 +18,7 @@ public static class ApplicationDependencyInjection
     private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
     {
         services.AddScoped<IPlaceService, PlaceService>();
+        services.AddScoped<IHomeService, HomeService>();
         services.AddScoped<IClaimService, ClaimService>();
     }
     private static void RegisterAutoMapper(this IServiceCollection services)

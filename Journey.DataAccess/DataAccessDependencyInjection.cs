@@ -1,4 +1,6 @@
 ﻿using Journey.DataAccess.Database;
+using Journey.DataAccess.Repositories;
+using Journey.DataAccess.Repositories.Impl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
@@ -20,7 +22,7 @@ public static class DataAccessDependencyInjection
         var json = configuration.GetSection("Database");
         var databaseConfig = new DatabaseConfiguration()
         {
-            ConnectionString = json.GetSection("TestDb").Value,
+            ConnectionString = json.GetSection("ConnectionString").Value,
             UseInMemoryDatabase = json.GetSection("UseInMemoryDatabase").Value == "true" ? true : false,
         };
         if (databaseConfig.UseInMemoryDatabase)

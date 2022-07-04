@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Journey.Application.Models;
-using Journey.DataAccess;
+using Journey.DataAccess.Repositories;
 
 namespace Journey.Application.Services.Impl;
 

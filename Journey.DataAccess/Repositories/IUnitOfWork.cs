@@ -1,7 +1,4 @@
-﻿using Journey.DataAccess.Repositories;
-
-
-namespace Journey.DataAccess
+﻿namespace Journey.DataAccess.Repositories
 {
     public interface IUnitOfWork
     {

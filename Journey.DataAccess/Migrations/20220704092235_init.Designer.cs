@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Journey.DataAccess.Migrations
 {
     [DbContext(typeof(JourneyWebContext))]
-    [Migration("20220701151832_init")]
+    [Migration("20220704092235_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

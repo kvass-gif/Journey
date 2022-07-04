@@ -1,23 +1,21 @@
-﻿using Journey.Application.Services;
+﻿using Journey.Application.Models;
+using Journey.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Journey.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IPlaceService _placeService;
-        public HomeController(IPlaceService placeService)
+
+        private readonly IHomeService _homeService;
+        public HomeController(IHomeService homeService)
         {
-            _placeService = placeService;
+            _homeService = homeService;
         }
         public async Task<IActionResult> Index()
         {
-            var el = await _placeService.GetAllByListAsync();
-            return View(el);
-        }
-        public IActionResult Privacy()
-        {
-            return View();
+            IEnumerable<PlaceResponseModel> placeResponseModels = await _homeService.GetAllByListAsync();
+            return View(placeResponseModels);
         }
     }
 }

@@ -11,16 +11,14 @@ public static class DatabaseContextSeed
     {
         seedRoles(roleManager);
         seedUsers(userManager);
-        context.SaveChanges();
-        seedPlaces(context);
+        seedPlaces(context, userManager);
         context.SaveChanges();
     }
     private static void seedRoles(RoleManager<IdentityRole> roleManager)
     {
-        var roleNames = new string[3];
+        var roleNames = new string[2];
         roleNames[0] = "Tenant";
         roleNames[1] = "LandLord";
-        roleNames[2] = "Admin";
         foreach (var roleName in roleNames)
         {
             if (roleManager.RoleExistsAsync(roleName).Result == false)
@@ -57,26 +55,29 @@ public static class DatabaseContextSeed
             }
         }
     }
-    private static void seedPlaces(JourneyWebContext context)
+    private static void seedPlaces(JourneyWebContext context, UserManager<IdentityUser> userManager)
     {
+        IList<IdentityUser> identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result;
+        IdentityUser identityUser = identityUsers.First();
         if (context.Places.Any() == false)
         {
             context.Places.Add(new Place()
             {
                 PlaceName = "place1",
-                CreatedByUserId = "Admin",
+                CreatedByUserId = identityUser.Id,
                 CreatedOn = DateTime.Now.Date
+                
             });
             context.Places.Add(new Place()
             {
                 PlaceName = "place2",
-                CreatedByUserId = "Admin",
+                CreatedByUserId = identityUser.Id,
                 CreatedOn = DateTime.Now.Date
             });
             context.Places.Add(new Place()
             {
                 PlaceName = "place3",
-                CreatedByUserId = "Admin",
+                CreatedByUserId = identityUser.Id,
                 CreatedOn = DateTime.Now.Date
             });
         }
