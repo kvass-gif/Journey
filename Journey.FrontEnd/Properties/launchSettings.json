@@ -1,20 +1,20 @@
-﻿{
+{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "sslPort": 0
+      "applicationUrl": "http://localhost:51437/",
+      "sslPort": 44352
     }
   },
   "profiles": {
     "Journey.FrontEnd": {
       "commandName": "Project",
-      "dotnetRunMessages": true,
       "launchBrowser": true,
-
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "dotnetRunMessages": true
     },
     "IIS Express": {
       "commandName": "IISExpress",
