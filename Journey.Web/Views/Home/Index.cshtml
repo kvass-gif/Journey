@@ -9,9 +9,37 @@
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
-
+<form id="getByName">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="placeName"
+                                 class="form-control" style="width:300px; display:inline-block;" />
+            <input type="button" value="send" onclick="getPlacesByName()"/>
+        </p>
+    </div>
+</form>
 
 @foreach (var place in Model)
 {
     <p> @place.PlaceName</p>
 }
+
+<script type="text/javascript">
+    function getPlacesByName() {
+        var data = $("#getByName").serialize();
+        console.log(data);
+        $.ajax({
+            type: 'GET',
+            url: '/Home/Data',
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            data: data,
+            success: function(result) {
+                console.log('Successfully received Data ');
+                console.log(result);
+            },
+            error: function() {
+                console.log('Failed to receive the Data');
+            }
+        })
+    }
+</script>
