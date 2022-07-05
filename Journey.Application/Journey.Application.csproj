@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Journey.DataAccess\Journey.DataAccess.csproj" />
-    <ProjectReference Include="..\Journey\Journey.csproj" />
   </ItemGroup>
 
 </Project>

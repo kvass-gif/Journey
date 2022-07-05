@@ -17,7 +17,7 @@
     },
     "Journey.Web": {
       "commandName": "Project",
-      "workingDirectory": "D:\\Journey\\Back\\Journey\\Journey.Web",
+      "workingDirectory": "D:\\Journey\\Journey\\Journey.Web",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
