@@ -164,16 +164,16 @@ namespace Journey.Data
             applicationDbContext.SaveChanges();
             seedFacilities(applicationDbContext.Facilities);
             applicationDbContext.SaveChanges();
-            var landLords = findUsersByRole(accountDbContext, "LandLord");
-            seedPlaces(applicationDbContext.Places, landLords);
-            applicationDbContext.SaveChanges();
-            seedFacilitiesPlaces(applicationDbContext.Places, applicationDbContext.Facilities.ToArray(),
-                applicationDbContext.FacilityPlaces);
-            applicationDbContext.SaveChanges();
-            var tenants = findUsersByRole(accountDbContext, "Tenant");
-            seedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
-            seedPhotos(applicationDbContext.Photos, applicationDbContext.Places, filePhotoRepo);
-            applicationDbContext.SaveChanges();
+            //var landLords = findUsersByRole(accountDbContext, "LandLord");
+            //seedPlaces(applicationDbContext.Places, landLords);
+            //applicationDbContext.SaveChanges();
+            //seedFacilitiesPlaces(applicationDbContext.Places, applicationDbContext.Facilities.ToArray(),
+            //    applicationDbContext.FacilityPlaces);
+            //applicationDbContext.SaveChanges();
+            //var tenants = findUsersByRole(accountDbContext, "Tenant");
+            //seedReservations(applicationDbContext.Reservations, applicationDbContext.Places, tenants);
+            //seedPhotos(applicationDbContext.Photos, applicationDbContext.Places, filePhotoRepo);
+            //applicationDbContext.SaveChanges();
         }
         
         private static void seedPhotos(DbSet<Photo> photos, DbSet<Place> places, FilePhotoRepo filePhoto)

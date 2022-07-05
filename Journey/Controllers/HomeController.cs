@@ -30,9 +30,14 @@ namespace Journey.Controllers
             {
                 return NotFound();
             }
+            
             obj.ArrivalDate = arrivalDate;
             obj.DepartureDate = departureDate;
             return View(obj);
+        }
+        public IActionResult About()
+        {
+            return View();
         }
     }
 }
