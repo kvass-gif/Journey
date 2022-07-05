@@ -1,5 +1,4 @@
 ﻿using Journey.Data;
-using Journey.Entities;
 using Journey.ViewModels.Home;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,11 +14,11 @@ namespace Journey.Controllers
             this.unitOfWork = unitOfWork;
             modelHandler = new HomeViewHandler(unitOfWork);
         }
-        public IActionResult Index(HomeViewModel homeViewModel)
-        {
-            modelHandler.HandleIndexView(homeViewModel);
-            return View(homeViewModel);
-        }
+        //public IActionResult Index(HomeViewModel homeViewModel)
+        //{
+        //    modelHandler.HandleIndexView(homeViewModel);
+        //    return View(homeViewModel);
+        //}
         public IActionResult Details(int? id, DateTime? arrivalDate, DateTime? departureDate)
         {
             if (id == null)
