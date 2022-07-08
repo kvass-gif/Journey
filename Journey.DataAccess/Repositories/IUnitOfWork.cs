@@ -3,5 +3,6 @@
     public interface IUnitOfWork
     {
         IPlaceRepository PlaceRepo { get; }
+        Task SaveChangesAsync();
     }
 }

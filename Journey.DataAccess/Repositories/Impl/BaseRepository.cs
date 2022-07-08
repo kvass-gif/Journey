@@ -1,4 +1,6 @@
 ﻿using Journey.DataAccess.Database;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
@@ -6,9 +8,9 @@ namespace Journey.DataAccess.Repositories;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    protected readonly JourneyWebContext context;
+    protected readonly IdentityDbContext<IdentityUser> context;
     protected readonly DbSet<TEntity> DbSet;
-    public BaseRepository(JourneyWebContext context)
+    public BaseRepository(IdentityDbContext<IdentityUser> context)
     {
         this.context = context;
         DbSet = context.Set<TEntity>();
@@ -45,8 +47,5 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
         }
         return entity;
     }
-    public async Task SaveChangesAsync()
-    {
-        await SaveChangesAsync();
-    }
+    
 }

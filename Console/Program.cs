@@ -1,19 +1,22 @@
 ﻿using Journey.DataAccess;
-using Journey.DataAccess.Database;
+using Journey.DataAccess.Entities;
+using Journey.DataAccess.Repositories;
+using Journey.DataAccess.Services;
 using Journey.DataAccess.Services.Impl;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
-IConfigurationBuilder builder = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true);
-IConfigurationRoot root = builder.Build();
-var database = root.GetSection("Database").GetSection("ConnectionString").Value;
-var contextOptions = new DbContextOptionsBuilder<JourneyWebContext>()
-    .UseSqlServer(database)
-    .Options;
-//var applicationDbContext = new JourneyWebContext(contextOptions, new ClaimService());
-//IUnitOfWork uof = new UnitOfWork(applicationDbContext);
-//foreach (var place in uof.PlaceRepo.GetAllAsync().Result)
-//{
-//    Console.WriteLine(place.PlaceName);
-//}
-
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddDataAccess(builder.Configuration).AddIdentity();
+builder.Services.AddScoped<IClaimService, ClaimService>();
+var app = builder.Build();
+var scope = app.Services.CreateScope();
+IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+IClaimService claimService = scope.ServiceProvider.GetRequiredService<IClaimService>();
+var userId = claimService.GetUserId();
+Console.WriteLine(userId);
+IList<Place> places = unitOfWork.PlaceRepo.GetAllAsync().Result;
+foreach (var item in places)
+{
+    Console.WriteLine(item.PlaceName);
+}

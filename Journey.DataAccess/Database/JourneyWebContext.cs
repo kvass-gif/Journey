@@ -16,7 +16,6 @@ public class JourneyWebContext : IdentityDbContext<IdentityUser>
         _claimService = claimService;
     }
     public DbSet<Place> Places { get; set; }
-    
     public new async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         foreach (var entry in ChangeTracker.Entries<IAuditedEntity>())

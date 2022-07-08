@@ -20,6 +20,7 @@ namespace Journey.DataAccess.IntegrationTests.Config
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDataAccess(builder.Configuration);
+            builder.Services.AddIdentity();
             builder.Services.AddScoped<IClaimService, ClaimService>();
             var app = builder.Build();
             var scope = app.Services.CreateScope();

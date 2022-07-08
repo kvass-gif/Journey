@@ -20,6 +20,10 @@ namespace Journey.Application.Services.Impl
             return _mapper.Map<IEnumerable<PlaceResponseModel>>(places);
         }
 
-       
+        public async Task<IEnumerable<PlaceResponseModel>> GetAllByListAsync(string placeName)
+        {
+            var places = await _unitOfWork.PlaceRepo.GetAllAsync(p => p.PlaceName == placeName);
+            return _mapper.Map<IEnumerable<PlaceResponseModel>>(places);
+        }
     }
 }

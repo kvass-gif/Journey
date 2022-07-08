@@ -17,10 +17,11 @@ namespace Journey.Web.Controllers
             IEnumerable<PlaceResponseModel> placeResponseModels = await _homeService.GetAllByListAsync();
             return View(placeResponseModels);
         }
-        public async Task<IActionResult> Data(string SearchString)
+        public async Task<IActionResult> Data(string placeName)
         {
+            IEnumerable<PlaceResponseModel> placeResponseModels = await _homeService.GetAllByListAsync(placeName);
 
-            return Content($"Hello {SearchString}");
+            return Content($"Hello {placeName}");
         }
     }
 }

@@ -9,5 +9,4 @@ public interface IBaseRepository<TEntity> where TEntity : class
     Task<TEntity> AddAsync(TEntity entity);
     TEntity Update(TEntity entity);
     TEntity Delete(TEntity entity);
-    Task SaveChangesAsync();
 }

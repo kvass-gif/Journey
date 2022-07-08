@@ -19,7 +19,7 @@ namespace Journey.DataAccess.Services.Impl
             var value = _httpContextAccessor.HttpContext?.User.FindFirst(key)?.Value;
             if(value == null)
             {
-                throw new NullReferenceException();
+                throw new NullReferenceException("No such user");
             }
             return value;
         }

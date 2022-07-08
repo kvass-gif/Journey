@@ -1,5 +1,4 @@
 ﻿using Journey.DataAccess.Database;
-using Journey.DataAccess.Repositories;
 
 namespace Journey.DataAccess.Repositories.Impl;
 
@@ -21,6 +20,10 @@ public class UnitOfWork : IUnitOfWork
             }
             return placeRepo;
         }
+    }
+    public async Task SaveChangesAsync()
+    {
+        await _context.SaveChangesAsync();
     }
 }
 
