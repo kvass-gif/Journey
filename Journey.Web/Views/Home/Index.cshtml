@@ -1,6 +1,5 @@
 ﻿@using Journey.Application.Models
 @using Journey.DataAccess.Entities;
-@model IEnumerable<PlaceResponseModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -12,33 +11,75 @@
 <form id="getByName">
     <div class="form-actions no-color">
         <p>
-            Find by name: <input type="text" name="placeName"
+            Find by name: <input type="text" name="placeName" id="placeNameField"
                                  class="form-control" style="width:300px; display:inline-block;" />
-            <input type="button" value="send" onclick="getPlacesByName()"/>
         </p>
     </div>
 </form>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">PlaceName</th>
+        </tr>
+    </thead>
+    <tbody id="places">
+    </tbody>
+</table>
+@section Scripts{
+    <script type="text/javascript">
 
-@foreach (var place in Model)
-{
-    <p> @place.PlaceName</p>
+        function writeOnSreen(result, places) {
+            let obj = JSON.parse(result);
+            obj.forEach(element => {
+                var th = document.createElement("th");
+                th.setAttribute("scope", "row");
+                var text = document.createTextNode(element.PlaceName);
+                th.appendChild(text);
+                var tr = document.createElement("tr");
+                tr.appendChild(th);
+                places.appendChild(tr);
+            });
+        }
+        function doAjax() {
+            var data = $("#getByName").serialize();
+            $.ajax({
+                type: 'GET',
+                url: '/Home/PlacesByName',
+                data: data,
+                success: function(result) {
+                    let places = document.getElementById("places");
+                    while (places.firstChild) {
+                        places.removeChild(places.firstChild);
+                    }
+                    writeOnSreen(result, places);
+                },
+                error: function() {
+                    Alert('Failed to receive the Data');
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $.ajax({
+                type: 'GET',
+                url: '/Home/AllPlaces',
+                success: function(result) {
+                    let places = document.getElementById("places");
+                    writeOnSreen(result, places);
+                },
+                error: function() {
+                    Alert('Failed to receive the Data');
+                }
+            });
+            var searchField = document.getElementById("placeNameField");
+            searchField.addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                    doAjax();
+                }
+            });
+        });
+
+
+    </script>
 }
-
-<script type="text/javascript">
-    function getPlacesByName() {
-        var data = $("#getByName").serialize();
-        console.log(data);
-        $.ajax({
-            type: 'GET',
-            url: '/Home/Data',
-            data: data,
-            success: function(result) {
-                console.log('Successfully received Data ');
-                console.log(result);
-            },
-            error: function() {
-                console.log('Failed to receive the Data');
-            }
-        })
-    }
-</script>

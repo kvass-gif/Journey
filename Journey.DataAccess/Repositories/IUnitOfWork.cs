@@ -1,6 +1,6 @@
 ﻿namespace Journey.DataAccess.Repositories
 {
-    public interface IUnitOfWork
+    public interface IUnitofWork
     {
         IPlaceRepository PlaceRepo { get; }
         Task SaveChangesAsync();

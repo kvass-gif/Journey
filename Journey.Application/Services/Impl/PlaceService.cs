@@ -7,8 +7,8 @@ namespace Journey.Application.Services.Impl;
 public class PlaceService : IPlaceService
 {
     private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
-    public PlaceService(IUnitOfWork unitOfWork, IMapper mapper)
+    private readonly DataAccess.Repositories.IUnitofWork _unitOfWork;
+    public PlaceService(DataAccess.Repositories.IUnitofWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;

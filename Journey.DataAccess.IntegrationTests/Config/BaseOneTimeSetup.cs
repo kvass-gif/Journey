@@ -12,7 +12,7 @@ namespace Journey.DataAccess.IntegrationTests.Config
     [SetUpFixture]
     public class BaseOneTimeSetup
     {
-        protected IUnitOfWork unitOfWork;
+        protected IUnitofWork unitOfWork;
         private string[] args;
 
         [OneTimeSetUp]
@@ -29,7 +29,7 @@ namespace Journey.DataAccess.IntegrationTests.Config
             var context = scope.ServiceProvider.GetRequiredService<JourneyWebContext>();
             AutomatedMigration.Migrate(context);
             DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context);
-            unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitofWork>();
         }
 
         [OneTimeTearDown]

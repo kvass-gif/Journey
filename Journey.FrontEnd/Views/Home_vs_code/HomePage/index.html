@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <main role="main" class="pb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">PlaceName</th>
+                    </tr>
+                </thead>
+                <tbody id="new">
+                    <tr>
+                        <th scope="row">@place.PlaceName</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">@place.PlaceName</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">@place.PlaceName</th>
+                    </tr>
+                </tbody>
+            </table>
+            <button id="addRow" type="button" class="btn btn-primary">Add</button>
+        </main>
+    </div>
+    <script src="/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var btn = document.getElementById("addRow");
+        btn.addEventListener("click", function () {
+            var th = document.createElement("th");
+            th.setAttribute("scope", "row");
+            var text = document.createTextNode("@place.PlaceName");
+            th.appendChild(text);
+            var tr = document.createElement("tr");
+            tr.appendChild(th);
+            var element = document.getElementById("new");
+            element.appendChild(tr);
+        });
+    </script>
+</body>
+
+</html>

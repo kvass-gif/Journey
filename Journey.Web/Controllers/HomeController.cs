@@ -1,6 +1,7 @@
 ﻿using Journey.Application.Models;
 using Journey.Application.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace Journey.Web.Controllers
 {
@@ -12,16 +13,19 @@ namespace Journey.Web.Controllers
         {
             _homeService = homeService;
         }
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            IEnumerable<PlaceResponseModel> placeResponseModels = await _homeService.GetAllByListAsync();
-            return View(placeResponseModels);
+            return View();
         }
-        public async Task<IActionResult> Data(string placeName)
+        public async Task<IActionResult> PlacesByName(string placeName)
         {
-            IEnumerable<PlaceResponseModel> placeResponseModels = await _homeService.GetAllByListAsync(placeName);
-
-            return Content($"Hello {placeName}");
+            var placeResponseModels = await _homeService.GetAllByListAsync(placeName);
+            return Json(JsonSerializer.Serialize(placeResponseModels));
+        }
+        public async Task<IActionResult> AllPlaces()
+        {
+            var placeResponseModels = await _homeService.GetAllByListAsync();
+            return Json(JsonSerializer.Serialize(placeResponseModels));
         }
     }
 }

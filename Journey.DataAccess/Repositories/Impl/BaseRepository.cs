@@ -38,6 +38,10 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
     {
         return await DbSet.ToListAsync();
     }
+    public List<TEntity> GetAll()
+    {
+        return DbSet.ToList();
+    }
     public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();

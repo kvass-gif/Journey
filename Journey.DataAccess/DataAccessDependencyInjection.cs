@@ -13,7 +13,7 @@ public static class DataAccessDependencyInjection
     public static IServiceCollection AddDataAccess(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDatabase(configuration);
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IUnitofWork, UnitOfWork>();
         return services;
     }
     public static IServiceCollection AddIdentity(this IServiceCollection services)

@@ -12,7 +12,7 @@ public static class ApplicationDependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services, IWebHostEnvironment env)
     {
         services.AddServices(env);
-        services.RegisterAutoMapper();
+        services.AddAutoMapper(typeof(IMappingProfilesMarker));
         return services;
     }
     private static void AddServices(this IServiceCollection services, IWebHostEnvironment env)
@@ -21,8 +21,5 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IHomeService, HomeService>();
         services.AddScoped<IClaimService, ClaimService>();
     }
-    private static void RegisterAutoMapper(this IServiceCollection services)
-    {
-        services.AddAutoMapper(typeof(IMappingProfilesMarker));
-    }
+    
 }

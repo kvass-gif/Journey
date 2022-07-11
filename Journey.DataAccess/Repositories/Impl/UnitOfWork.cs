@@ -2,7 +2,7 @@
 
 namespace Journey.DataAccess.Repositories.Impl;
 
-public class UnitOfWork : IUnitOfWork
+public class UnitOfWork : IUnitofWork
 {
     private readonly JourneyWebContext _context;
     private PlaceRepository placeRepo;
