@@ -4,10 +4,12 @@ using Journey.DataAccess.Database;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().WithRazorPagesRoot("/AccountPages"); ;
 builder.Services
     .AddDataAccess(builder.Configuration)
     .AddIdentity()
+    .AddCookieSettings()
+    .AddAuthorizationSettings()
     .AddApplication(builder.Environment);
 
 var app = builder.Build();

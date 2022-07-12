@@ -2,10 +2,11 @@
 
 namespace Journey.DataAccess.Repositories.Impl;
 
-public class UnitOfWork : IUnitofWork
+public class UnitOfWork : IUnitOfWork
 {
     private readonly JourneyWebContext _context;
-    private PlaceRepository placeRepo;
+    private IPlaceRepository placeRepo;
+    private IRoleRepository roleRepo;
     public UnitOfWork(JourneyWebContext context)
     {
         _context = context;
@@ -19,6 +20,17 @@ public class UnitOfWork : IUnitofWork
                 placeRepo = new PlaceRepository(_context);
             }
             return placeRepo;
+        }
+    }
+    public IRoleRepository RoleRepo
+    {
+        get
+        {
+            if (roleRepo == null)
+            {
+                roleRepo = new RoleRepository(_context);
+            }
+            return roleRepo;
         }
     }
     public async Task SaveChangesAsync()

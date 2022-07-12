@@ -20,6 +20,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IPlaceService, PlaceService>();
         services.AddScoped<IHomeService, HomeService>();
         services.AddScoped<IClaimService, ClaimService>();
+        services.AddScoped<IIdentityService, IdentityService>();
     }
     
 }

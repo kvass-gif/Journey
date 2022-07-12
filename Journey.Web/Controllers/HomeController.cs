@@ -1,5 +1,4 @@
-﻿using Journey.Application.Models;
-using Journey.Application.Services;
+﻿using Journey.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 

@@ -45,7 +45,7 @@ public static class DatabaseContextSeed
                         user.UserName = name;
                         user.Email = i < 3 ? "landlord@email.com" : "tenant@email.com";
                         user.PhoneNumber = phone;
-                        IdentityResult result = userManager.CreateAsync(user, "1@Qwas").Result;
+                        IdentityResult result = userManager.CreateAsync(user, "1111").Result;
                         if (result.Succeeded)
                         {
                             userManager.AddToRoleAsync(user, i < 3 ? "LandLord" : "Tenant").Wait();
@@ -55,10 +55,25 @@ public static class DatabaseContextSeed
             }
         }
     }
+    private static void seedUser(UserManager<IdentityUser> userManager)
+    {
+        if (userManager.Users.Any() == false)
+        {
+            IdentityUser user = new IdentityUser();
+            user.UserName = "Igor";
+            user.Email = "landlord@email.com";
+            user.PhoneNumber = "+380000000000";
+            IdentityResult result = userManager.CreateAsync(user, "1@Qwas").Result;
+            if (result.Succeeded)
+            {
+                userManager.AddToRoleAsync(user, "LandLord").Wait();
+            }
+        }
+    }
     private static void seedPlaces(JourneyWebContext context, UserManager<IdentityUser> userManager)
     {
-        IList<IdentityUser> identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result;
-        IdentityUser identityUser = identityUsers.First();
+        var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result;
+        var identityUser = identityUsers.First();
         if (context.Places.Any() == false)
         {
             context.Places.Add(new Place()

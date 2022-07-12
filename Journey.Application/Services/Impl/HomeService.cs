@@ -8,8 +8,8 @@ namespace Journey.Application.Services.Impl
     public class HomeService : IHomeService
     {
         private readonly IMapper _mapper;
-        private readonly IUnitofWork _unitOfWork;
-        public HomeService(IUnitofWork unitOfWork, IMapper mapper)
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
