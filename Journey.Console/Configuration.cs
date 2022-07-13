@@ -19,6 +19,7 @@ namespace Journey.Console
             IHost host = Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) => services
                 .AddDataAccess(builder.Configuration)
+                .AddIdentity()
                 .AddScoped<IClaimService, ClaimPrincipalService>())
                 .Build();
             IServiceScope serviceScope = host.Services.CreateScope();

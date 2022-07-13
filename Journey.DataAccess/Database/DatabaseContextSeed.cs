@@ -73,29 +73,20 @@ public static class DatabaseContextSeed
     }
     private static void seedPlaces(JourneyWebContext context, UserManager<ApplicationUser> userManager)
     {
-        var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result;
-        var identityUser = identityUsers.First();
+        var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result.ToArray();
         if (context.Places.Any() == false)
         {
-            context.Places.Add(new Place()
+            for (int i = 0; i < 100; i++)
             {
-                PlaceName = "place1",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-                
-            });
-            context.Places.Add(new Place()
-            {
-                PlaceName = "place2",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-            });
-            context.Places.Add(new Place()
-            {
-                PlaceName = "place3",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-            });
+                var identityUser = identityUsers[Faker.RandomNumber.Next(0, identityUsers.Length - 1)];
+                context.Places.Add(new Place()
+                {
+                    PlaceName = Faker.Company.Name(),
+                    ApplicationUserId = identityUser.Id,
+                    CreatedByUserId = identityUser.Id,
+                    CreatedOn = DateTime.Now.Date
+                });
+            }
         }
     }
 }
