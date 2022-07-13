@@ -1,5 +1,4 @@
-﻿using Journey.DataAccess.Database;
-using Microsoft.AspNetCore.Identity;
+﻿using Journey.DataAccess.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
@@ -8,9 +7,9 @@ namespace Journey.DataAccess.Repositories;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    protected readonly IdentityDbContext<IdentityUser> context;
+    protected readonly IdentityDbContext<ApplicationUser> context;
     protected readonly DbSet<TEntity> DbSet;
-    public BaseRepository(IdentityDbContext<IdentityUser> context)
+    public BaseRepository(IdentityDbContext<ApplicationUser> context)
     {
         this.context = context;
         DbSet = context.Set<TEntity>();
@@ -45,11 +44,11 @@ public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where T
     public async Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate)
     {
         var entity = await DbSet.Where(predicate).FirstOrDefaultAsync();
-        if (entity == null) 
+        if (entity == null)
         {
             throw new NullReferenceException();
         }
         return entity;
     }
-    
+
 }

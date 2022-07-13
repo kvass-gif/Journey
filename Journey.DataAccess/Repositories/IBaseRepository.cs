@@ -1,4 +1,5 @@
 ﻿using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace Journey.DataAccess.Repositories;
 public interface IBaseRepository<TEntity> where TEntity : class

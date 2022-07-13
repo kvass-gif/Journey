@@ -1,4 +1,5 @@
 ﻿using Journey.DataAccess.Database;
+using Journey.DataAccess.Identity;
 using Journey.DataAccess.Repositories;
 using Journey.DataAccess.Repositories.Impl;
 using Microsoft.AspNetCore.Identity;
@@ -19,7 +20,7 @@ public static class DataAccessDependencyInjection
     }
     public static IServiceCollection AddIdentity(this IServiceCollection services)
     {
-        services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+        services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<JourneyWebContext>();
 

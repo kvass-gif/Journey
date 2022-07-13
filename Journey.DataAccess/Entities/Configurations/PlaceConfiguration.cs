@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Journey.DataAccess.Entities.Configurations
@@ -8,7 +9,8 @@ namespace Journey.DataAccess.Entities.Configurations
         public void Configure(EntityTypeBuilder<Place> builder)
         {
             builder.HasKey(a => a.Id);
-            builder.HasIndex(a => a.PlaceName);
+            builder.HasIndex(a => a.PlaceName).IsUnique();
+            builder.HasOne(p => p.ApplicationUser).WithMany(u => u.Places);
         }
     }
 }
