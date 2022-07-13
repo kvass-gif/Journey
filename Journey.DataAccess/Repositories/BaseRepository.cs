@@ -1,4 +1,5 @@
-﻿using Journey.DataAccess.Identity;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Abstraction;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

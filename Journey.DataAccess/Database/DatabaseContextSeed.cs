@@ -1,5 +1,5 @@
-﻿using Journey.DataAccess.Entities;
-using Journey.DataAccess.Identity;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Journey.DataAccess.Database;

@@ -1,7 +1,7 @@
-﻿
+﻿using Journey.Core.Identity;
 using Journey.DataAccess.Entities;
-using Journey.DataAccess.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Journey.DataAccess.Abstraction;
 
 namespace Journey.DataAccess.Repositories;
 public class PlaceRepository : BaseRepository<Place>, IPlaceRepository

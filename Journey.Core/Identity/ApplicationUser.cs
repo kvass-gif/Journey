@@ -1,7 +1,7 @@
 ﻿using Journey.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 
-namespace Journey.DataAccess.Identity
+namespace Journey.Core.Identity
 {
     public class ApplicationUser : IdentityUser
     {

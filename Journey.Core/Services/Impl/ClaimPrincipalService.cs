@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace Journey.DataAccess.Services.Impl
+namespace Journey.Core.Services.Impl
 {
     public class ClaimPrincipalService : IClaimService
     {

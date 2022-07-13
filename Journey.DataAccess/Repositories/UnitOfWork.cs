@@ -1,6 +1,7 @@
 ﻿using Journey.DataAccess.Database;
+using Journey.DataAccess.Abstraction;
 
-namespace Journey.DataAccess.Repositories.Impl;
+namespace Journey.DataAccess.Repositories;
 
 public class UnitOfWork : IUnitOfWork
 {

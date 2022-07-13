@@ -1,6 +1,4 @@
-﻿using Journey.DataAccess.Entities;
-using Journey.DataAccess.IntegrationTests.Config;
-using Journey.DataAccess.Repositories;
+﻿using Journey.DataAccess.IntegrationTests.Config;
 using NUnit.Framework;
 
 namespace Journey.DataAccess.IntegrationTests.Tests;

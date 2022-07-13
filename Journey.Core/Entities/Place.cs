@@ -1,5 +1,5 @@
-﻿using Journey.DataAccess.Common;
-using Journey.DataAccess.Identity;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Common;
 
 namespace Journey.DataAccess.Entities
 {

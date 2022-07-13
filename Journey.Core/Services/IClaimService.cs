@@ -1,4 +1,4 @@
-﻿namespace Journey.DataAccess.Services
+﻿namespace Journey.Core.Services
 {
     public interface IClaimService
     {

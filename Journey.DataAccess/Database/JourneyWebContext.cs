@@ -1,7 +1,7 @@
-﻿using Journey.DataAccess.Common;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Common;
 using Journey.DataAccess.Entities;
-using Journey.DataAccess.Identity;
-using Journey.DataAccess.Services;
+using Journey.Core.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 

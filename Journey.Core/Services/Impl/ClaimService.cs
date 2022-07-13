@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
-namespace Journey.DataAccess.Services.Impl
+namespace Journey.Core.Services.Impl
 {
     public class ClaimService : IClaimService
     {
@@ -17,7 +17,7 @@ namespace Journey.DataAccess.Services.Impl
         public string GetClaim(string key)
         {
             var value = _httpContextAccessor.HttpContext?.User.FindFirst(key)?.Value;
-            if(value == null)
+            if (value == null)
             {
                 throw new NullReferenceException("No such user");
             }
