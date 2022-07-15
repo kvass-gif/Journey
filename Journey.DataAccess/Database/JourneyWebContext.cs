@@ -1,13 +1,13 @@
-﻿using Journey.DataAccess.Common;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Common;
 using Journey.DataAccess.Entities;
-using Journey.DataAccess.Services;
-using Microsoft.AspNetCore.Identity;
+using Journey.Core.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Journey.DataAccess.Database;
 
-public class JourneyWebContext : IdentityDbContext<IdentityUser>
+public class JourneyWebContext : IdentityDbContext<ApplicationUser>
 {
     private readonly IClaimService _claimService;
     public JourneyWebContext(DbContextOptions<JourneyWebContext> options, IClaimService claimService)

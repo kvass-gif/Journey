@@ -1,7 +1,8 @@
-﻿using Journey.DataAccess.Database;
-using Journey.DataAccess.Repositories;
-using Journey.DataAccess.Services;
-using Journey.DataAccess.Services.Impl;
+﻿using Journey.Core.Identity;
+using Journey.Core.Services;
+using Journey.Core.Services.Impl;
+using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +26,7 @@ namespace Journey.DataAccess.IntegrationTests.Config
             var app = builder.Build();
             var scope = app.Services.CreateScope();
             var identityRole = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var identityUser = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+            var identityUser = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var context = scope.ServiceProvider.GetRequiredService<JourneyWebContext>();
             AutomatedMigration.Migrate(context);
             DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context);

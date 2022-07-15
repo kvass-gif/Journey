@@ -1,4 +1,5 @@
-﻿using Journey.DataAccess.Entities;
+﻿using Journey.Core.Identity;
+using Journey.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Journey.DataAccess.Database;
@@ -6,7 +7,7 @@ public static class DatabaseContextSeed
 {
     public static void SeedDatabase(
         RoleManager<IdentityRole> roleManager,
-        UserManager<IdentityUser> userManager,
+        UserManager<ApplicationUser> userManager,
         JourneyWebContext context)
     {
         seedRoles(roleManager);
@@ -29,7 +30,7 @@ public static class DatabaseContextSeed
             }
         }
     }
-    private static void seedUsers(UserManager<IdentityUser> userManager)
+    private static void seedUsers(UserManager<ApplicationUser> userManager)
     {
         if (userManager.Users.Count() < 50)
         {
@@ -41,7 +42,7 @@ public static class DatabaseContextSeed
                     var phone = Faker.Phone.Number();
                     if (userManager.FindByNameAsync(name).Result == null)
                     {
-                        IdentityUser user = new IdentityUser();
+                        ApplicationUser user = new ApplicationUser();
                         user.UserName = name;
                         user.Email = i < 3 ? "landlord@email.com" : "tenant@email.com";
                         user.PhoneNumber = phone;
@@ -70,31 +71,22 @@ public static class DatabaseContextSeed
             }
         }
     }
-    private static void seedPlaces(JourneyWebContext context, UserManager<IdentityUser> userManager)
+    private static void seedPlaces(JourneyWebContext context, UserManager<ApplicationUser> userManager)
     {
-        var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result;
-        var identityUser = identityUsers.First();
+        var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result.ToArray();
         if (context.Places.Any() == false)
         {
-            context.Places.Add(new Place()
+            for (int i = 0; i < 100; i++)
             {
-                PlaceName = "place1",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-                
-            });
-            context.Places.Add(new Place()
-            {
-                PlaceName = "place2",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-            });
-            context.Places.Add(new Place()
-            {
-                PlaceName = "place3",
-                CreatedByUserId = identityUser.Id,
-                CreatedOn = DateTime.Now.Date
-            });
+                var identityUser = identityUsers[Faker.RandomNumber.Next(0, identityUsers.Length - 1)];
+                context.Places.Add(new Place()
+                {
+                    PlaceName = Faker.Company.Name(),
+                    ApplicationUserId = identityUser.Id,
+                    CreatedByUserId = identityUser.Id,
+                    CreatedOn = DateTime.Now.Date
+                });
+            }
         }
     }
 }
