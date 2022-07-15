@@ -1,5 +1,5 @@
 ﻿using Journey.DataAccess.Database;
-using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Contract;
 
 namespace Journey.DataAccess.Repositories;
 

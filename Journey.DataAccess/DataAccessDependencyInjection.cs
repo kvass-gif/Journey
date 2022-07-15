@@ -1,5 +1,5 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Contract;
 using Journey.DataAccess.Database;
 using Journey.DataAccess.Repositories;
 using Microsoft.AspNetCore.Identity;

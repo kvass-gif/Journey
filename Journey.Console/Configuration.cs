@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Contract;
 
 namespace Journey.Console
 {

@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Journey.DataAccess.Abstraction\Journey.DataAccess.Abstraction.csproj" />
+    <ProjectReference Include="..\Journey.DataAccess.Contract\Journey.DataAccess.Contract.csproj" />
   </ItemGroup>
 
 </Project>

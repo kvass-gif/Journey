@@ -1,4 +1,4 @@
-﻿namespace Journey.DataAccess.Abstraction
+﻿namespace Journey.DataAccess.Contract
 {
     public interface IUnitOfWork
     {

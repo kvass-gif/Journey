@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Journey.DataAccess.Abstraction;
+namespace Journey.DataAccess.Contract;
 public interface IBaseRepository<TEntity> where TEntity : class
 {
     Task<TEntity> GetFirstAsync(Expression<Func<TEntity, bool>> predicate);

@@ -1,5 +1,5 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Contract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;

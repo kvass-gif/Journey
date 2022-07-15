@@ -1,7 +1,7 @@
 ﻿using Journey.Core.Identity;
 using Journey.Core.Services;
 using Journey.Core.Services.Impl;
-using Journey.DataAccess.Abstraction;
+using Journey.DataAccess.Contract;
 using Journey.DataAccess.Database;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
