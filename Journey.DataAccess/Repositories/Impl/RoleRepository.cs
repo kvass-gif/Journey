@@ -1,9 +1,8 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess.Contract;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
-namespace Journey.DataAccess.Repositories
+namespace Journey.DataAccess.Repositories.Impl
 {
     public class RoleRepository : BaseRepository<IdentityRole>, IRoleRepository
     {

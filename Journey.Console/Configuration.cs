@@ -1,13 +1,13 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess;
-using Journey.DataAccess.Database;
 using Journey.Core.Services;
 using Journey.Core.Services.Impl;
+using Journey.DataAccess;
+using Journey.DataAccess.Database;
+using Journey.DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Journey.DataAccess.Contract;
 
 namespace Journey.Console
 {

@@ -1,7 +1,7 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess.Contract;
 using Journey.DataAccess.Database;
 using Journey.DataAccess.Repositories;
+using Journey.DataAccess.Repositories.Impl;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;

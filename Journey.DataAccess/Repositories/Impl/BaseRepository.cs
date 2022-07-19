@@ -1,10 +1,9 @@
 ﻿using Journey.Core.Identity;
-using Journey.DataAccess.Contract;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Journey.DataAccess.Repositories;
+namespace Journey.DataAccess.Repositories.Impl;
 
 public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
