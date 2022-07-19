@@ -1,3 +1,10 @@
-# Journey
-This project is designed to demonstrate my programming skills and possibly later for deployment on a server
-To start the project, only what you need is to press f5
+## Journey
+### Appliction type
+Web application
+### Purpose
+This project is designed to showcase my programming skills
+### Basic technologies
+ASP.NET framework for web applications, MVC design pattern, web pages for identity, entity framework core to use database 
+### Architecture
+N-tier architecture was implemented in the project, which makes it easier for the project development, especially large projects
+
