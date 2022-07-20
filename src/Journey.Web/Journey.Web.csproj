@@ -10,8 +10,4 @@
     <ProjectReference Include="..\Journey.Application\Journey.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\PagesVScode\" />
-  </ItemGroup>
-
 </Project>

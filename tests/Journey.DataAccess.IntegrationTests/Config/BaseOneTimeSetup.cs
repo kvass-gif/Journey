@@ -1,8 +1,8 @@
 ﻿using Journey.Core.Identity;
 using Journey.Core.Services;
 using Journey.Core.Services.Impl;
-using Journey.DataAccess.Contract;
 using Journey.DataAccess.Database;
+using Journey.DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;

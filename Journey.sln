@@ -28,12 +28,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{B8ABEA94-85F
 		sql\SelectAllUsersByRole.sql = sql\SelectAllUsersByRole.sql
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "front-end", "front-end", "{01C51643-3259-4C71-A40A-0BD2317662C5}"
-	ProjectSection(SolutionItems) = preProject
-		front-end\HTMLPage1.html = front-end\HTMLPage1.html
-		front-end\StyleSheet1.css = front-end\StyleSheet1.css
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Journey.DataAccess.IntegrationTests", "tests\Journey.DataAccess.IntegrationTests\Journey.DataAccess.IntegrationTests.csproj", "{F9F32F10-0F62-41D9-8388-6820743544F7}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Journey.Application.UnitTests", "tests\Journey.Application.UnitTests\Journey.Application.UnitTests.csproj", "{77AA2526-34E7-4E20-9537-44AAEC32E0BB}"
