@@ -19,6 +19,7 @@ public static class ApplicationDependencyInjection
     {
         services.AddScoped<IHomeService, HomeService>();
         services.AddScoped<IClaimService, ClaimService>();
+        services.AddScoped<IIdentityService, IdentityService>();
     }
     private static void RegisterAutoMapper(this IServiceCollection services)
     {
