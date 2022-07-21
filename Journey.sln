@@ -24,6 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "diagrams", "diagrams", "{F3
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{B8ABEA94-85F9-4C5E-9416-F83FC36460FC}"
 	ProjectSection(SolutionItems) = preProject
+		sql\DeleteAllUsers.sql = sql\DeleteAllUsers.sql
 		sql\Exec.sql = sql\Exec.sql
 		sql\SelectAllUsersByRole.sql = sql\SelectAllUsersByRole.sql
 	EndProjectSection

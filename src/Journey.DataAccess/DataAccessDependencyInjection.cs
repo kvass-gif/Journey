@@ -91,8 +91,4 @@ public static class DataAccessDependencyInjection
     }
 
 }
-public class DatabaseConfiguration
-{
-    public bool UseInMemoryDatabase { get; set; }
-    public string ConnectionString { get; set; }
-}
+
