@@ -84,7 +84,12 @@ public static class DatabaseContextSeed
                     PlaceName = Faker.Company.Name(),
                     ApplicationUserId = identityUser.Id,
                     CreatedByUserId = identityUser.Id,
-                    CreatedOn = DateTime.Now.Date
+                    CreatedOn = DateTime.Now.Date,
+                    Description = Faker.Lorem.Paragraph(),
+                    StreetAddress = Faker.Address.StreetAddress(),
+                    BedsCount = Faker.RandomNumber.Next(1, 4),
+                    Rank = Faker.RandomNumber.Next(1, 5),
+                    PricePerNight = Faker.RandomNumber.Next(1, 100)
                 });
             }
         }

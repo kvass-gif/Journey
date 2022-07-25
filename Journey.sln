@@ -19,7 +19,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{5FFF846D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "diagrams", "diagrams", "{F3574B98-204E-44E6-89E4-0BC1ED527EDB}"
 	ProjectSection(SolutionItems) = preProject
+		diagrams\Account.png = diagrams\Account.png
+		diagrams\AuthentificationAutherization.png = diagrams\AuthentificationAutherization.png
+		diagrams\JourneyDb.png = diagrams\JourneyDb.png
 		diagrams\N-Tier-Architecture.svg = diagrams\N-Tier-Architecture.svg
+		diagrams\usercase.png = diagrams\usercase.png
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sql", "sql", "{B8ABEA94-85F9-4C5E-9416-F83FC36460FC}"
