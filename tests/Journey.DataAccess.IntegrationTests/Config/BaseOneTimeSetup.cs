@@ -6,6 +6,7 @@ using Journey.DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 
 namespace Journey.DataAccess.IntegrationTests.Config
@@ -14,23 +15,27 @@ namespace Journey.DataAccess.IntegrationTests.Config
     public class BaseOneTimeSetup
     {
         protected IUnitOfWork unitOfWork;
-        private string[] args;
+        private string[] args = new string[0];
 
         [OneTimeSetUp]
         public void RunBeforeAnyTestsAsync()
         {
             var builder = WebApplication.CreateBuilder(args);
-            builder.Services.AddDataAccess(builder.Configuration);
-            builder.Services.AddIdentity();
-            builder.Services.AddScoped<IClaimService, ClaimService>();
-            var app = builder.Build();
-            var scope = app.Services.CreateScope();
-            var identityRole = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-            var identityUser = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var context = scope.ServiceProvider.GetRequiredService<JourneyWebContext>();
+            IHost host = Host.CreateDefaultBuilder(args)
+                .ConfigureServices((_, services) => services
+                .AddDataAccess(builder.Configuration)
+                .AddIdentityCore()
+                .AddIdentityConfiguration()
+                .AddScoped<IClaimService, ClaimPrincipalService>())
+                .Build();
+            IServiceScope serviceScope = host.Services.CreateScope();
+            IServiceProvider provider = serviceScope.ServiceProvider;
+            var identityRole = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+            var identityUser = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var context = serviceScope.ServiceProvider.GetRequiredService<JourneyWebContext>();
             AutomatedMigration.Migrate(context);
-            DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context);
-            unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            TestSeeder.SeedDatabase(identityRole, identityUser, context);
+            unitOfWork = provider.GetRequiredService<IUnitOfWork>();
         }
 
         [OneTimeTearDown]

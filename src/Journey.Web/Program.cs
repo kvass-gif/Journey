@@ -23,7 +23,12 @@ if (app.Environment.IsDevelopment() == true)
         var identityUser = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
         var context = scope.ServiceProvider.GetRequiredService<JourneyWebContext>();
         AutomatedMigration.Migrate(context);
-        DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context);
+        var counts = new
+        {
+            UsersNum = 10,
+            PlacesNum = 100
+        };
+        DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context, counts);
     }
 }
 app.UseStaticFiles();
