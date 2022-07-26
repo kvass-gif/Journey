@@ -7,12 +7,11 @@ namespace Journey.DataAccess.IntegrationTests.Tests;
 public class PlaceRepositoryTests : BaseOneTimeSetup
 {
     [Test]
-    public async Task GetAllAsyncTest()
+    public async Task GetAllByNameAsyncTest()
     {
         var placeRepository = unitOfWork.PlaceRepo;
-        var listM = await placeRepository.GetAllAsync(a => a.PlaceName.Contains("m"));
-        var listLem = await placeRepository.GetAllAsync(a => a.PlaceName.Contains("Lem"));
-        var listLm = await placeRepository.GetAllAsync(a => a.PlaceName.Contains("Lm"));
-        Assert.True(listM.Count == 2 && listLem.Count == 1 && listLm.Count == 0);
+        var list = await placeRepository.GetAllByName("m", 5, 10);
+        Assert.True(true);
+        
     }
 }

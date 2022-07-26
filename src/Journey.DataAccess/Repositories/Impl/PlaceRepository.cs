@@ -1,19 +1,31 @@
 ﻿using Journey.Core.Identity;
 using Journey.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace Journey.DataAccess.Repositories.Impl;
-public class PlaceRepository : BaseRepository<Place>, IPlaceRepository<Place>
+public class PlaceRepository : BaseRepository<Place>, IPlaceRepository
 {
     public PlaceRepository(IdentityDbContext<ApplicationUser> context) : base(context) { }
 
-    public Task<List<Place>> GetAllByNamePagination(string name, int startIndex, int endIndex, int pageSize)
+    public async Task<List<Place>> GetAllByName(string name, int start, int takeObjects)
     {
-        var data = from place in dbSet
+        if(name == null)
+        {
+            throw new ArgumentNullException(nameof(name));
+        }
+        if(start < 0)
+        {
+            throw new ArgumentException(nameof(start));
+        }
+        if (takeObjects < 0)
+        {
+            throw new ArgumentException(nameof(takeObjects));
+        }
+        var data = (from place in dbSet
                      where place.PlaceName.Contains(name)
-                     select place;
-        int totalPage = data.Count();
-        float totalNumsize = totalPage / (float)pageSize;
-        throw new NotImplementedException();
+                     orderby place.PlaceName
+                     select place).Skip(start).Take(takeObjects);
+        return await data.ToListAsync();
     }
 }
