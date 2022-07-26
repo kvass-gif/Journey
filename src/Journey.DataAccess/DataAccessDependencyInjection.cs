@@ -23,7 +23,17 @@ public static class DataAccessDependencyInjection
         services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<JourneyWebContext>();
-
+        return services;
+    }
+    public static IServiceCollection AddIdentityCore(this IServiceCollection services)
+    {
+        services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<JourneyWebContext>();
+        return services;
+    }
+    public static IServiceCollection AddIdentityConfiguration(this IServiceCollection services)
+    {
         services.Configure<IdentityOptions>(options =>
         {
             options.Password.RequireDigit = true;
@@ -71,7 +81,7 @@ public static class DataAccessDependencyInjection
         var databaseConfig = new DatabaseConfiguration()
         {
             ConnectionString = json.GetSection("ConnectionString").Value,
-            UseInMemoryDatabase = json.GetSection("UseInMemoryDatabase").Value == "true" ? true : false,
+            UseInMemoryDatabase = json.GetSection("UseInMemoryDatabase").Value == "True" ? true : false,
         };
         if (databaseConfig.UseInMemoryDatabase)
         {

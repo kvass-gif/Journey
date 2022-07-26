@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Dynamic;
 
 namespace Journey.Console
 {
@@ -19,7 +20,8 @@ namespace Journey.Console
             IHost host = Host.CreateDefaultBuilder(args)
                 .ConfigureServices((_, services) => services
                 .AddDataAccess(builder.Configuration)
-                .AddIdentity()
+                .AddIdentityCore()
+                .AddIdentityConfiguration()
                 .AddScoped<IClaimService, ClaimPrincipalService>())
                 .Build();
             IServiceScope serviceScope = host.Services.CreateScope();
@@ -28,7 +30,7 @@ namespace Journey.Console
             var identityUser = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var context = serviceScope.ServiceProvider.GetRequiredService<JourneyWebContext>();
             AutomatedMigration.Migrate(context);
-            DatabaseContextSeed.SeedDatabase(identityRole, identityUser, context);
+            TestSeeder.SeedDatabase(identityRole, identityUser, context);
             return provider.GetRequiredService<IUnitOfWork>();
         }
     }

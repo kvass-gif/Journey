@@ -1,6 +1,7 @@
 ﻿using Journey.Core.Identity;
 using Journey.DataAccess.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.Dynamic;
 
 namespace Journey.DataAccess.Database;
 public static class DatabaseContextSeed
@@ -8,11 +9,11 @@ public static class DatabaseContextSeed
     public static void SeedDatabase(
         RoleManager<IdentityRole> roleManager,
         UserManager<ApplicationUser> userManager,
-        JourneyWebContext context)
+        JourneyWebContext context, dynamic countObjects)
     {
         seedRoles(roleManager);
-        seedUsers(userManager);
-        seedPlaces(context, userManager);
+        seedUsers(userManager, (int)countObjects.UsersNum);
+        seedPlaces(context, userManager, (int)countObjects.PlacesNum);
         context.SaveChanges();
     }
     private static void seedRoles(RoleManager<IdentityRole> roleManager)
@@ -30,11 +31,11 @@ public static class DatabaseContextSeed
             }
         }
     }
-    private static void seedUsers(UserManager<ApplicationUser> userManager)
+    private static void seedUsers(UserManager<ApplicationUser> userManager, int count)
     {
-        if (userManager.Users.Count() < 50)
+        if (userManager.Users.Count() < count)
         {
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < count; i++)
             {
                 var name = Faker.Name.First();
                 if (userManager.Users.SingleOrDefault(u => u.UserName == name) == null)
@@ -42,14 +43,15 @@ public static class DatabaseContextSeed
                     var phone = Faker.Phone.Number();
                     if (userManager.FindByNameAsync(name).Result == null)
                     {
+                        double countLandLords = Math.Round(((double)30 / 100) * count, MidpointRounding.AwayFromZero);
                         ApplicationUser user = new ApplicationUser();
                         user.UserName = name;
-                        user.Email = i < 3 ? "landlord@email.com" : "tenant@email.com";
+                        user.Email = i < countLandLords ? "landlord@email.com" : "tenant@email.com";
                         user.PhoneNumber = phone;
                         IdentityResult result = userManager.CreateAsync(user, "1111").Result;
                         if (result.Succeeded)
                         {
-                            userManager.AddToRoleAsync(user, i < 3 ? "LandLord" : "Tenant").Wait();
+                            userManager.AddToRoleAsync(user, i < countLandLords ? "LandLord" : "Tenant").Wait();
                         }
                     }
                 }
@@ -71,12 +73,12 @@ public static class DatabaseContextSeed
             }
         }
     }
-    private static void seedPlaces(JourneyWebContext context, UserManager<ApplicationUser> userManager)
+    private static void seedPlaces(JourneyWebContext context, UserManager<ApplicationUser> userManager, int count)
     {
         var identityUsers = userManager.GetUsersInRoleAsync("LandLord").Result.ToArray();
         if (context.Places.Any() == false)
         {
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < count; i++)
             {
                 var identityUser = identityUsers[Faker.RandomNumber.Next(0, identityUsers.Length - 1)];
                 context.Places.Add(new Place()
